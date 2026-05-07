@@ -1,0 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace F1Manager.Web.Models
+{
+    public class Campeonato
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "O nome do campeonato é obrigatório.")]
+        [StringLength(100)]
+        public string Nome { get; set; } // Ex: Fórmula 1 - 2025, ou Fórmula 2 - 2025
+
+        [Required]
+        public int Ano { get; set; }
+
+        // Relacionamento 1-para-Muitos: Um Campeonato tem várias Corridas
+        public ICollection<Corrida> Corridas { get; set; }
+    }
+}
