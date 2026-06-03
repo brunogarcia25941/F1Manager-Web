@@ -10,6 +10,7 @@ namespace F1Manager.Web.Data
             // Managers necessários para gerir utilizadores e permissões
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
             // 1. Criar os Roles se não existirem
             string[] roleNames = { "Administrador", "Piloto" };
