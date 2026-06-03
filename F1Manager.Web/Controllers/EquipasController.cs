@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using F1Manager.Web.Data;
 using F1Manager.Web.Models;
+using F1Manager.Web.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace F1Manager.Web.Controllers
 {
@@ -18,17 +20,32 @@ namespace F1Manager.Web.Controllers
 
         // GET: api/Equipas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Equipa>>> GetEquipas()
+        public async Task<ActionResult<IEnumerable<EquipaDTO>>> GetEquipas()
         {
-            // Nota: Em cenários reais, usaríamos DTOs para evitar ciclos de referência com Pilotos
-            return await _context.Equipas.ToListAsync();
+            return await _context.Equipas
+                .Select(e => new EquipaDTO
+                {
+                    Id = e.Id,
+                    Nome = e.Nome,
+                    FabricanteMotor = e.FabricanteMotor,
+                    Pais = e.Pais
+                })
+                .ToListAsync();
         }
 
         // GET: api/Equipas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Equipa>> GetEquipa(int id)
+        public async Task<ActionResult<EquipaDTO>> GetEquipa(int id)
         {
-            var equipa = await _context.Equipas.FindAsync(id);
+            var equipa = await _context.Equipas
+                .Select(e => new EquipaDTO
+                {
+                    Id = e.Id,
+                    Nome = e.Nome,
+                    FabricanteMotor = e.FabricanteMotor,
+                    Pais = e.Pais
+                })
+                .FirstOrDefaultAsync(e => e.Id == id);
 
             if (equipa == null)
             {
@@ -40,12 +57,23 @@ namespace F1Manager.Web.Controllers
 
         // PUT: api/Equipas/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEquipa(int id, Equipa equipa)
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> PutEquipa(int id, EquipaDTO equipaDto)
         {
-            if (id != equipa.Id)
+            if (id != equipaDto.Id)
             {
                 return BadRequest();
             }
+
+            var equipa = await _context.Equipas.FindAsync(id);
+            if (equipa == null)
+            {
+                return NotFound();
+            }
+
+            equipa.Nome = equipaDto.Nome;
+            equipa.FabricanteMotor = equipaDto.FabricanteMotor;
+            equipa.Pais = equipaDto.Pais;
 
             _context.Entry(equipa).State = EntityState.Modified;
 
@@ -70,16 +98,27 @@ namespace F1Manager.Web.Controllers
 
         // POST: api/Equipas
         [HttpPost]
-        public async Task<ActionResult<Equipa>> PostEquipa(Equipa equipa)
+        [Authorize(Roles = "Administrador")]
+        public async Task<ActionResult<EquipaDTO>> PostEquipa(EquipaDTO equipaDto)
         {
+            var equipa = new Equipa
+            {
+                Nome = equipaDto.Nome,
+                FabricanteMotor = equipaDto.FabricanteMotor,
+                Pais = equipaDto.Pais
+            };
+
             _context.Equipas.Add(equipa);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEquipa", new { id = equipa.Id }, equipa);
+            equipaDto.Id = equipa.Id;
+
+            return CreatedAtAction("GetEquipa", new { id = equipa.Id }, equipaDto);
         }
 
         // DELETE: api/Equipas/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteEquipa(int id)
         {
             var equipa = await _context.Equipas

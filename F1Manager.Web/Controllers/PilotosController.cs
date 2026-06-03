@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using F1Manager.Web.Data;
 using F1Manager.Web.Models;
+using F1Manager.Web.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace F1Manager.Web.Controllers
 {
@@ -18,16 +20,38 @@ namespace F1Manager.Web.Controllers
 
         // GET: api/Pilotos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Piloto>>> GetPilotos()
+        public async Task<ActionResult<IEnumerable<PilotoDTO>>> GetPilotos()
         {
-            return await _context.Pilotos.ToListAsync();
+            return await _context.Pilotos
+                .Include(p => p.Equipa)
+                .Select(p => new PilotoDTO
+                {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    NumeroCarro = p.NumeroCarro,
+                    UserId = p.UserId,
+                    EquipaId = p.EquipaId,
+                    NomeEquipa = p.Equipa.Nome
+                })
+                .ToListAsync();
         }
 
         // GET: api/Pilotos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Piloto>> GetPiloto(int id)
+        public async Task<ActionResult<PilotoDTO>> GetPiloto(int id)
         {
-            var piloto = await _context.Pilotos.FindAsync(id);
+            var piloto = await _context.Pilotos
+                .Include(p => p.Equipa)
+                .Select(p => new PilotoDTO
+                {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    NumeroCarro = p.NumeroCarro,
+                    UserId = p.UserId,
+                    EquipaId = p.EquipaId,
+                    NomeEquipa = p.Equipa.Nome
+                })
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (piloto == null)
             {
@@ -39,12 +63,24 @@ namespace F1Manager.Web.Controllers
 
         // PUT: api/Pilotos/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPiloto(int id, Piloto piloto)
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> PutPiloto(int id, PilotoDTO pilotoDto)
         {
-            if (id != piloto.Id)
+            if (id != pilotoDto.Id)
             {
                 return BadRequest();
             }
+
+            var piloto = await _context.Pilotos.FindAsync(id);
+            if (piloto == null)
+            {
+                return NotFound();
+            }
+
+            piloto.Nome = pilotoDto.Nome;
+            piloto.NumeroCarro = pilotoDto.NumeroCarro;
+            piloto.UserId = pilotoDto.UserId;
+            piloto.EquipaId = pilotoDto.EquipaId;
 
             _context.Entry(piloto).State = EntityState.Modified;
 
@@ -69,16 +105,28 @@ namespace F1Manager.Web.Controllers
 
         // POST: api/Pilotos
         [HttpPost]
-        public async Task<ActionResult<Piloto>> PostPiloto(Piloto piloto)
+        [Authorize(Roles = "Administrador")]
+        public async Task<ActionResult<PilotoDTO>> PostPiloto(PilotoDTO pilotoDto)
         {
+            var piloto = new Piloto
+            {
+                Nome = pilotoDto.Nome,
+                NumeroCarro = pilotoDto.NumeroCarro,
+                UserId = pilotoDto.UserId,
+                EquipaId = pilotoDto.EquipaId
+            };
+
             _context.Pilotos.Add(piloto);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPiloto", new { id = piloto.Id }, piloto);
+            pilotoDto.Id = piloto.Id;
+
+            return CreatedAtAction("GetPiloto", new { id = piloto.Id }, pilotoDto);
         }
 
         // DELETE: api/Pilotos/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeletePiloto(int id)
         {
             var piloto = await _context.Pilotos
