@@ -29,3 +29,52 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Cores F1 */
+:root {
+    --f1-red: #e10600;
+    --f1-black: #15151e;
+    --f1-dark-grey: #38383f;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+/* Estilo para o destaque principal */
+.hero-f1 {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+url('https://images.impresa.pt/sicnot/2023-03-03-formula-1-b637392c/original');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    border-bottom: 5px solid var(--f1-red);
+    margin-bottom: 30px;
+    border-radius: 0 0 50px 0; /* Corte diagonal */
+}
+
+.btn-f1 {
+    background-color: var(--f1-red);
+    color: white;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 25px;
+    transition: 0.3s;
+}
+
+.btn-f1:hover {
+    background-color: #b80500;
+    color: white;
+    transform: scale(1.05);
+}
+
+.card-f1 {
+    border-left: 4px solid var(--f1-red);
+    transition: 0.3s;
+}
+
+.card-f1:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
