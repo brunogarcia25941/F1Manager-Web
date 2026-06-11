@@ -1,0 +1,14 @@
+@page
+@model F1Manager.Web.Pages.Pilotos.DeleteModel
+@{
+    ViewData["Title"] = "Apagar Piloto";
+}
+
+<h1>Apagar Piloto</h1>
+<h3>Tem a certeza que deseja apagar o piloto @Model.Piloto.Nome?</h3>
+
+<form method="post">
+    <input type="hidden" asp-for="Piloto.Id" />
+    <input type="submit" value="Confirmar Remoção" class="btn btn-danger" />
+    <a asp-page="./Index" class="btn btn-secondary">Cancelar</a>
+</form>

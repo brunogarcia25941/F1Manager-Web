@@ -21,9 +21,9 @@ namespace F1Manager.Web.Models
         // Chave Estrangeira (1-para-Muitos) - Equipa
         [ForeignKey("Equipa")]
         public int EquipaId { get; set; }
-        public Equipa Equipa { get; set; }
+        public Equipa? Equipa { get; set; }
 
         // Navegação para a tabela associativa (Muitos-para-Muitos)
-        public ICollection<ResultadoCorrida> Resultados { get; set; }
+        public virtual ICollection<ResultadoCorrida> Resultados { get; set; } = new List<ResultadoCorrida>();
     }
 }

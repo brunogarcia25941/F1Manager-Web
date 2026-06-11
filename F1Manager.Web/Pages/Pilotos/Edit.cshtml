@@ -1,0 +1,26 @@
+@page
+@model F1Manager.Web.Pages.Pilotos.EditModel
+@{
+    ViewData["Title"] = "Editar Piloto";
+}
+
+<h1>Editar Piloto</h1>
+<form method="post">
+    <input type="hidden" asp-for="Piloto.Id" />
+
+    <div class="form-group mb-3">
+        <label asp-for="Piloto.Nome" class="control-label"></label>
+        <input asp-for="Piloto.Nome" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Piloto.NumeroCarro" class="control-label">Número do Carro</label>
+        <input asp-for="Piloto.NumeroCarro" class="form-control" />
+        <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Piloto.EquipaId" class="control-label">Equipa</label>
+        <select asp-for="Piloto.EquipaId" class="form-control" asp-items="ViewBag.EquipaId"></select>
+    </div>
+    <input type="submit" value="Guardar" class="btn btn-primary" />
+    <a asp-page="./Index" class="btn btn-secondary">Voltar</a>
+</form>

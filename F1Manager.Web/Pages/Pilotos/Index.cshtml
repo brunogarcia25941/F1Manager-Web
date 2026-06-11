@@ -1,0 +1,42 @@
+@page
+@model F1Manager.Web.Pages.Pilotos.IndexModel
+@{
+    ViewData["Title"] = "Pilotos";
+}
+
+<h1>Lista de Pilotos</h1>
+
+@if (User.IsInRole("Administrador"))
+{
+    <p>
+        <a asp-page="Create" class="btn btn-primary">Adicionar Novo Piloto</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Número</th>
+            <th>Equipa</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Pilotos)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.NumeroCarro</td>
+                <td>@item.Equipa.Nome</td> <!-- Mostra o nome da equipa relacionada -->
+                <td>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
+                }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

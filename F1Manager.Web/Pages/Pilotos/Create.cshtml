@@ -1,0 +1,41 @@
+@page
+@model F1Manager.Web.Pages.Pilotos.CreateModel
+@{
+    ViewData["Title"] = "Novo Piloto";
+}
+
+<h1>Adicionar Novo Piloto</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Piloto.Nome" class="control-label">Nome do Piloto</label>
+                <input asp-for="Piloto.Nome" class="form-control" />
+                <span asp-validation-for="Piloto.Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Piloto.NumeroCarro" class="control-label">Número do Carro</label>
+                <input asp-for="Piloto.NumeroCarro" class="form-control" />
+                <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
+            </div>
+
+            <!-- Dropdown para selecionar a Equipa -->
+            <div class="form-group mb-3">
+                <label asp-for="Piloto.EquipaId" class="control-label">Equipa</label>
+                <select asp-for="Piloto.EquipaId" class="form-control" asp-items="ViewBag.EquipaId">
+                    <option value="">-- Selecione uma Equipa --</option>
+                </select>
+                <span asp-validation-for="Piloto.EquipaId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary" />
+                <a asp-page="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>

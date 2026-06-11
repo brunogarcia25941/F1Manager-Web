@@ -16,6 +16,6 @@ namespace F1Manager.Web.Models
         public string Pais { get; set; }
 
         // Relacionamento 1-para-Muitos: Uma equipa tem vários pilotos
-        public ICollection<Piloto> Pilotos { get; set; }
+        public virtual ICollection<Piloto> Pilotos { get; set; } = new List<Piloto>();
     }
 }

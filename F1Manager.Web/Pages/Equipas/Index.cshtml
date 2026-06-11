@@ -1,0 +1,45 @@
+@page
+@model F1Manager.Web.Pages.Equipas.IndexModel
+@{
+    ViewData["Title"] = "Lista de Equipas";
+}
+
+<div class="container">
+    <h1 class="display-4">Equipas de F1</h1>
+
+    @if (User.IsInRole("Administrador"))
+    {
+        <p>
+            <a asp-page="Create" class="btn btn-primary">Adicionar Nova Equipa</a>
+        </p>
+    }
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Fabricante de Motor</th>
+                <th>País</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Equipas)
+            {
+                <tr>
+                    <td>@item.Nome</td>
+                    <td>@item.FabricanteMotor</td>
+                    <td>@item.Pais</td>
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes</a>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
