@@ -1,0 +1,36 @@
+@page
+@model F1Manager.Web.Pages.Campeonatos.CreateModel
+@{
+    ViewData["Title"] = "Novo Campeonato";
+}
+
+<h1>Adicionar Novo Campeonato</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Campeonato.Nome" class="control-label">Nome do Campeonato</label>
+                <input asp-for="Campeonato.Nome" class="form-control" placeholder="ex: Fórmula 1 - 2026" />
+                <span asp-validation-for="Campeonato.Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Campeonato.Ano" class="control-label">Ano</label>
+                <input asp-for="Campeonato.Ano" class="form-control" type="number" value="@DateTime.Now.Year" />
+                <span asp-validation-for="Campeonato.Ano" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

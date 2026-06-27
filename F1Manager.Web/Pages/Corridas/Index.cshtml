@@ -1,0 +1,47 @@
+@page
+@model F1Manager.Web.Pages.Corridas.IndexModel
+@{
+    ViewData["Title"] = "Calendário de Corridas";
+}
+
+<div class="container">
+    <h1 class="display-4">Calendário de Corridas</h1>
+
+    @if (User.IsInRole("Administrador"))
+    {
+        <p>
+            <a asp-page="Create" class="btn btn-primary">Agendar Nova Corrida</a>
+        </p>
+    }
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Grande Prémio</th>
+                <th>Circuito</th>
+                <th>Data e Hora</th>
+                <th>Campeonato</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Corridas)
+            {
+                <tr>
+                    <td class="fw-bold">@item.NomeGrandePremio</td>
+                    <td>@item.Circuito</td>
+                    <td>@item.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@(item.Campeonato != null ? item.Campeonato.Nome : "Sem Campeonato")</td>
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver Corrida / Resultados</a>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

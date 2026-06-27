@@ -1,0 +1,26 @@
+@page
+@model F1Manager.Web.Pages.Campeonatos.DeleteModel
+@{
+    ViewData["Title"] = "Apagar Campeonato";
+}
+
+<h1>Apagar Campeonato</h1>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+<h3>Tens a certeza que queres apagar @Model.Campeonato.Nome?</h3>
+
+<form method="post" class="mt-3">
+    <input type="hidden" asp-for="Campeonato.Id" />
+    
+    @if (string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <input type="submit" value="Sim, Apagar" class="btn btn-danger" />
+    }
+    <a asp-page="./Index" class="btn btn-secondary">Cancelar</a>
+</form>

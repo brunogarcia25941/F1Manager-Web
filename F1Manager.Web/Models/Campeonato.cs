@@ -15,6 +15,6 @@ namespace F1Manager.Web.Models
         public int Ano { get; set; }
 
         // Relacionamento 1-para-Muitos: Um Campeonato tem várias Corridas
-        public ICollection<Corrida> Corridas { get; set; }
+        public virtual ICollection<Corrida> Corridas { get; set; } = new List<Corrida>();
     }
 }

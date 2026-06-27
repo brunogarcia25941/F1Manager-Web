@@ -1,0 +1,84 @@
+@page
+@model F1Manager.Web.Pages.Corridas.RegistarResultadoModel
+@{
+    ViewData["Title"] = "Registar Resultado";
+}
+
+<h1>Registar Resultado Oficial</h1>
+<h5 class="text-muted">🏁 Grande Prémio: @Model.Corrida.NomeGrandePremio | @Model.Corrida.Circuito</h5>
+<hr />
+
+<div class="row">
+    <div class="col-md-5">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <!-- Seleção do Piloto -->
+            <div class="form-group mb-3">
+                <label asp-for="Resultado.PilotoId" class="control-label fw-bold">Piloto</label>
+                <select asp-for="Resultado.PilotoId" class="form-control" asp-items="ViewBag.PilotoId">
+                    <option value="">-- Selecione o Piloto --</option>
+                </select>
+                <span asp-validation-for="Resultado.PilotoId" class="text-danger"></span>
+            </div>
+
+            <!-- Posição Final -->
+            <div class="form-group mb-3">
+                <label asp-for="Resultado.PosicaoFinal" class="control-label fw-bold">Posição Final</label>
+                <input asp-for="Resultado.PosicaoFinal" class="form-control" id="posicaoInput" type="number" min="1" max="25" placeholder="ex: 1" />
+                <span asp-validation-for="Resultado.PosicaoFinal" class="text-danger"></span>
+            </div>
+
+            <!-- Pontos -->
+            <div class="form-group mb-3">
+                <label asp-for="Resultado.Pontos" class="control-label fw-bold">Pontos Obtidos</label>
+                <input asp-for="Resultado.Pontos" class="form-control" id="pontosInput" type="number" min="0" placeholder="ex: 25" />
+                <span asp-validation-for="Resultado.Pontos" class="text-danger"></span>
+                <small class="text-muted">Preenchido automaticamente segundo a tabela oficial de F1, mas editável.</small>
+            </div>
+
+            <!-- Tempo Volta Rápida -->
+            <div class="form-group mb-3">
+                <label asp-for="Resultado.TempoVoltaRapida" class="control-label fw-bold">Tempo da Volta Mais Rápida</label>
+                <input asp-for="Resultado.TempoVoltaRapida" class="form-control" placeholder="ex: 1:16.432 ou N/D" />
+                <span asp-validation-for="Resultado.TempoVoltaRapida" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Gravar Resultado" class="btn btn-success" />
+                <a asp-page="./Details" asp-route-id="@Model.Corrida.Id" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        document.getElementById('posicaoInput').addEventListener('input', function () {
+            const pos = parseInt(this.value);
+            const pontosInput = document.getElementById('pontosInput');
+            
+            // Tabela oficial de pontos F1
+            const pontosF1 = {
+                1: 25,
+                2: 18,
+                3: 15,
+                4: 12,
+                5: 10,
+                6: 8,
+                7: 6,
+                8: 4,
+                9: 2,
+                10: 1
+            };
+            
+            if (pos in pontosF1) {
+                pontosInput.value = pontosF1[pos];
+            } else if (pos > 10) {
+                pontosInput.value = 0;
+            }
+        });
+    </script>
+}

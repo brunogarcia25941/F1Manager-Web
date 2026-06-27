@@ -20,9 +20,9 @@ namespace F1Manager.Web.Models
         // Chave Estrangeira (1-para-Muitos) - Campeonato
         [ForeignKey("Campeonato")]
         public int CampeonatoId { get; set; }
-        public Campeonato Campeonato { get; set; }
+        public Campeonato? Campeonato { get; set; }
 
         // Navegação para a tabela associativa (Muitos-para-Muitos)
-        public ICollection<ResultadoCorrida> Resultados { get; set; }
+        public virtual ICollection<ResultadoCorrida> Resultados { get; set; } = new List<ResultadoCorrida>();
     }
 }

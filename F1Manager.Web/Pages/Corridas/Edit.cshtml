@@ -1,0 +1,50 @@
+@page
+@model F1Manager.Web.Pages.Corridas.EditModel
+@{
+    ViewData["Title"] = "Editar Corrida";
+}
+
+<h1>Editar Corrida</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <input type="hidden" asp-for="Corrida.Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Corrida.NomeGrandePremio" class="control-label">Nome do Grande Prémio</label>
+                <input asp-for="Corrida.NomeGrandePremio" class="form-control" />
+                <span asp-validation-for="Corrida.NomeGrandePremio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Corrida.Circuito" class="control-label">Circuito</label>
+                <input asp-for="Corrida.Circuito" class="form-control" />
+                <span asp-validation-for="Corrida.Circuito" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Corrida.DataHora" class="control-label">Data e Hora</label>
+                <input asp-for="Corrida.DataHora" class="form-control" type="datetime-local" />
+                <span asp-validation-for="Corrida.DataHora" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Corrida.CampeonatoId" class="control-label">Campeonato</label>
+                <select asp-for="Corrida.CampeonatoId" class="form-control" asp-items="ViewBag.CampeonatoId"></select>
+                <span asp-validation-for="Corrida.CampeonatoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
