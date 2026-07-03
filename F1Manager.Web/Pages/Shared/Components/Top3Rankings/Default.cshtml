@@ -1,0 +1,26 @@
+@model IEnumerable<F1Manager.Web.Models.ResultadoCorrida>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">🏁 Top 3 da Corrida</h5>
+    </div>
+    <div class="card-body">
+        @if (Model != null && Model.Any())
+        {
+            <ol class="mb-0 ps-3">
+                @foreach (var resultado in Model.Take(3))
+                {
+                    <li class="mb-2">
+                        <strong>@resultado.Piloto?.Nome</strong>
+                        <span class="text-muted">(@resultado.PosicaoFinal º)</span>
+                    </li>
+                }
+            </ol>
+        }
+        else
+        {
+            <p class="text-muted mb-0">Ainda sem resultados.</p>
+        }
+    }
+</div>
+</div>

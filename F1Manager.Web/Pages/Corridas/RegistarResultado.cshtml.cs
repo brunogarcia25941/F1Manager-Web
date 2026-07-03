@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using F1Manager.Web.Data;
+using F1Manager.Web.Hubs;
 using F1Manager.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace F1Manager.Web.Pages.Corridas
 {
@@ -12,10 +14,12 @@ namespace F1Manager.Web.Pages.Corridas
     public class RegistarResultadoModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHubContext<RaceHub> _hubContext;
 
-        public RegistarResultadoModel(ApplicationDbContext context)
+        public RegistarResultadoModel(ApplicationDbContext context, IHubContext<RaceHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         public Corrida Corrida { get; set; } = default!;
@@ -82,6 +86,22 @@ namespace F1Manager.Web.Pages.Corridas
 
             _context.ResultadosCorridas.Add(Resultado);
             await _context.SaveChangesAsync();
+
+            var resultadosAtualizados = await _context.ResultadosCorridas
+                .Include(r => r.Piloto)
+                    .ThenInclude(p => p.Equipa)
+                .Where(r => r.CorridaId == id)
+                .OrderBy(r => r.PosicaoFinal)
+                .Select(r => new RaceUpdate
+                {
+                    PosicaoFinal = r.PosicaoFinal,
+                    PilotoNome = r.Piloto.Nome,
+                    EquipaNome = r.Piloto.Equipa != null ? r.Piloto.Equipa.Nome : "Sem Equipa",
+                    TempoVoltaRapida = r.TempoVoltaRapida
+                })
+                .ToListAsync();
+
+            await _hubContext.Clients.All.SendAsync("ReceiveRaceUpdate", resultadosAtualizados);
 
             return RedirectToPage("./Details", new { id = id });
         }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using F1Manager.Web.Data; 
+using F1Manager.Web.Hubs;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 // Configuração do Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -56,6 +58,7 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 app.MapControllers();
+app.MapHub<RaceHub>("/raceHub");
 
 
 using (var scope = app.Services.CreateScope())

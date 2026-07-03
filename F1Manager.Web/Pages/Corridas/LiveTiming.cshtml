@@ -1,0 +1,62 @@
+@page "{id:int}"
+@model F1Manager.Web.Pages.Corridas.LiveTimingModel
+@{
+    ViewData["Title"] = "Live Timing";
+}
+
+<div class="container mt-4">
+    <h1 class="display-5 fw-bold">🕒 Live Timing</h1>
+    <p class="text-muted">Acompanhamento em tempo real dos resultados da corrida.</p>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="h5">@Model.Corrida?.NomeGrandePremio</h3>
+            <p class="mb-3">Circuito: <strong>@Model.Corrida?.Circuito</strong></p>
+            <div id="liveTable" class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Posição</th>
+                            <th>Piloto</th>
+                            <th>Equipa</th>
+                            <th>Tempo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        @foreach (var item in Model.Resultados)
+                        {
+                            <tr>
+                                <td>@item.PosicaoFinal</td>
+                                <td>@item.Piloto?.Nome</td>
+                                <td>@item.Piloto?.Equipa?.Nome</td>
+                                <td>@item.TempoVoltaRapida</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/raceHub")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveRaceUpdate", (results) => {
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = '';
+            results.forEach((item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.posicaoFinal}</td><td>${item.pilotoNome}</td><td>${item.equipaNome}</td><td>${item.tempoVoltaRapida}</td>`;
+                tbody.appendChild(row);
+            });
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
+}
