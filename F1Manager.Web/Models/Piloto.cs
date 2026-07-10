@@ -16,7 +16,16 @@ namespace F1Manager.Web.Models
 
         // LIGAÇÃO AO IDENTITY (Autenticação)
         // Quando um piloto faz login, guardamos o ID da conta dele para saber que este registo pertence apenas a ele
-        public string? UserId { get; set; } 
+        public string? UserId { get; set; }
+
+        [StringLength(500, ErrorMessage = "A biografia não pode exceder os 500 caracteres.")]
+        public string? Biografia { get; set; }
+
+        [Range(40, 150, ErrorMessage = "O peso deve estar entre 40kg e 150kg.")]
+        public double? Peso { get; set; }
+
+        // Guarda o caminho relativo da imagem de perfil guardada no servidor
+        public string? FotoPerfil { get; set; }
 
         // Chave Estrangeira (1-para-Muitos) - Equipa
         [ForeignKey("Equipa")]

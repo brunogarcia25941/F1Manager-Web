@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using F1Manager.Web.Data; 
+using F1Manager.Web.Data;
 using F1Manager.Web.Hubs;
 using Microsoft.AspNetCore.Identity;
 
@@ -13,9 +13,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Configuração do Identity para autenticação e autorização
 // todo: ajustar as opções de password e sign-in
-builder.Services.AddDefaultIdentity<IdentityUser>(options => {
-    options.SignIn.RequireConfirmedAccount = false; 
-    options.Password.RequireDigit = false;          
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
@@ -42,14 +43,19 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error");
+    // Redireciona exceções não tratadas (erros internos do servidor) para a página customizada /500 em produção
+    app.UseExceptionHandler("/500");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+// Interceta erros de código de status (ex: 404) e redireciona para a respetiva página (/404 ou /500)
+app.UseStatusCodePagesWithReExecute("/{0}");
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
 
 app.UseAuthentication(); // verifica QUEM é o utilizador
 app.UseAuthorization(); // verifica o que o utilizador pode fazer (com base nas roles)
