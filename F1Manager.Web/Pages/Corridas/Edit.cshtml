@@ -4,47 +4,64 @@
     ViewData["Title"] = "Editar Corrida";
 }
 
-<h1>Editar Corrida</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            
-            <input type="hidden" asp-for="Corrida.Id" />
+<!-- Contentor centrado com margem vertical -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 card-f1">
+                <div class="card-header bg-dark text-white p-4">
+                    <h2 class="h4 mb-0">🔧 Editar Grande Prémio</h2>
+                    <small class="text-muted">Modifique as informações do evento e a associação ao campeonato</small>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <input type="hidden" asp-for="Corrida.Id" />
 
-            <div class="form-group mb-3">
-                <label asp-for="Corrida.NomeGrandePremio" class="control-label">Nome do Grande Prémio</label>
-                <input asp-for="Corrida.NomeGrandePremio" class="form-control" />
-                <span asp-validation-for="Corrida.NomeGrandePremio" class="text-danger"></span>
-            </div>
+                        <!-- Nome do Grande Prémio -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Corrida.NomeGrandePremio" class="control-label fw-bold">Nome do Grande
+                                Prémio</label>
+                                <input asp-for="Corrida.NomeGrandePremio" class="form-control"
+                                       placeholder="Ex: GP da Austrália" />
+                                <span asp-validation-for="Corrida.NomeGrandePremio" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Corrida.Circuito" class="control-label">Circuito</label>
-                <input asp-for="Corrida.Circuito" class="form-control" />
-                <span asp-validation-for="Corrida.Circuito" class="text-danger"></span>
-            </div>
+                            <!-- Circuito -->
+                            <div class="form-group mb-3">
+                                <label asp-for="Corrida.Circuito" class="control-label fw-bold">Circuito</label>
+                                <input asp-for="Corrida.Circuito" class="form-control"
+                                       placeholder="Ex: Albert Park Circuit" />
+                                <span asp-validation-for="Corrida.Circuito" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Corrida.DataHora" class="control-label">Data e Hora</label>
-                <input asp-for="Corrida.DataHora" class="form-control" type="datetime-local" />
-                <span asp-validation-for="Corrida.DataHora" class="text-danger"></span>
-            </div>
+                            <!-- Data e Hora -->
+                            <div class="form-group mb-3">
+                                <label asp-for="Corrida.DataHora" class="control-label fw-bold">Data e Hora</label>
+                                <input asp-for="Corrida.DataHora" class="form-control" type="datetime-local" />
+                                <span asp-validation-for="Corrida.DataHora" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Corrida.CampeonatoId" class="control-label">Campeonato</label>
-                <select asp-for="Corrida.CampeonatoId" class="form-control" asp-items="ViewBag.CampeonatoId"></select>
-                <span asp-validation-for="Corrida.CampeonatoId" class="text-danger"></span>
-            </div>
+                            <!-- Campeonato -->
+                            <div class="form-group mb-4">
+                                <label asp-for="Corrida.CampeonatoId" class="control-label fw-bold">Campeonato</label>
+                                <select asp-for="Corrida.CampeonatoId" class="form-control"
+                                        asp-items="ViewBag.CampeonatoId"></select>
+                                <span asp-validation-for="Corrida.CampeonatoId" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
-                <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+                            <!-- Botões de Ação -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-f1 w-100 me-2">Guardar Alterações</button>
+                                <a asp-page="./Index" class="btn btn-secondary py-2 px-3">Voltar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

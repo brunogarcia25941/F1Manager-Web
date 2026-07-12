@@ -4,23 +4,64 @@
     ViewData["Title"] = "Editar Piloto";
 }
 
-<h1>Editar Piloto</h1>
-<form method="post">
-    <input type="hidden" asp-for="Piloto.Id" />
+<!-- Contentor centrado com margem vertical -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 card-f1">
+                <div class="card-header bg-dark text-white p-4">
+                    <h2 class="h4 mb-0">🔧 Editar Piloto</h2>
+                    <small class="text-muted">Modifique as informações do piloto e a associação de conta</small>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <input type="hidden" asp-for="Piloto.Id" />
 
-    <div class="form-group mb-3">
-        <label asp-for="Piloto.Nome" class="control-label"></label>
-        <input asp-for="Piloto.Nome" class="form-control" />
+                        <!-- Nome do Piloto -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Piloto.Nome" class="control-label fw-bold">Nome do Piloto</label>
+                            <input asp-for="Piloto.Nome" class="form-control" placeholder="Ex: Charles Leclerc" />
+                            <span asp-validation-for="Piloto.Nome" class="text-danger"></span>
+                        </div>
+
+                        <!-- Número do Carro -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Piloto.NumeroCarro" class="control-label fw-bold">Número do Carro</label>
+                            <input asp-for="Piloto.NumeroCarro" class="form-control" placeholder="Ex: 16" />
+                            <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
+                        </div>
+
+                        <!-- Equipa -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Piloto.EquipaId" class="control-label fw-bold">Equipa</label>
+                            <select asp-for="Piloto.EquipaId" class="form-control"
+                                    asp-items="ViewBag.EquipaId"></select>
+                            <span asp-validation-for="Piloto.EquipaId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Conta de Utilizador Associada -->
+                        <div class="form-group mb-4">
+                            <label asp-for="Piloto.UserId" class="control-label fw-bold">Conta de Utilizador Associada
+                                (Email)</label>
+                                <select asp-for="Piloto.UserId" class="form-control" asp-items="ViewBag.UserId">
+                                    <option value="">-- Sem Conta Associada --</option>
+                                </select>
+                                <span asp-validation-for="Piloto.UserId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-f1 w-100 me-2">Guardar Alterações</button>
+                                <a asp-page="./Index" class="btn btn-secondary py-2 px-3">Voltar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group mb-3">
-        <label asp-for="Piloto.NumeroCarro" class="control-label">Número do Carro</label>
-        <input asp-for="Piloto.NumeroCarro" class="form-control" />
-        <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="Piloto.EquipaId" class="control-label">Equipa</label>
-        <select asp-for="Piloto.EquipaId" class="form-control" asp-items="ViewBag.EquipaId"></select>
-    </div>
-    <input type="submit" value="Guardar" class="btn btn-primary" />
-    <a asp-page="./Index" class="btn btn-secondary">Voltar</a>
-</form>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

@@ -19,6 +19,7 @@
             <tr>
                 <th>Nome</th>
                 <th>Ano</th>
+                <th class="text-center">Nº de Corridas</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -28,16 +29,18 @@
                 <tr>
                     <td>@item.Nome</td>
                     <td>@item.Ano</td>
+                    <td class="text-center fw-bold">@item.Corridas.Count</td>
                     <td>
-                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes / Classificação</a>
-                        @if (User.IsInRole("Administrador"))
-                        {
-                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
-                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes /
+                            Classificação</a>
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

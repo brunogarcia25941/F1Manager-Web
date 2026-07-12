@@ -18,7 +18,9 @@ namespace F1Manager.Web.Pages.Campeonatos
 
         public async Task OnGetAsync()
         {
-            Campeonatos = await _context.Campeonatos.ToListAsync();
+            Campeonatos = await _context.Campeonatos
+                    .Include(c => c.Corridas)
+                    .ToListAsync();
         }
     }
 }
