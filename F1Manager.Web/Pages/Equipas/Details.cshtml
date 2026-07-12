@@ -36,8 +36,7 @@
                             <h3 class="display-6 fw-bold mb-1">@Model.Equipa.Nome</h3>
                             <p class="text-muted mb-2">Motorizador: <strong>@Model.Equipa.FabricanteMotor</strong></p>
                             <p class="text-muted mb-0">Chefe de Equipa:
-                                <strong>@(string.IsNullOrEmpty(Model.Equipa.ChefeEquipa) ? "Não especificado" :
-                                                                                                            Model.Equipa.ChefeEquipa)</strong>
+                                <strong>@(string.IsNullOrEmpty(Model.Equipa.ChefeEquipa) ? "Não especificado" : Model.Equipa.ChefeEquipa)</strong>
                                 </p>
                             </div>
                         </div>
@@ -53,7 +52,7 @@
                                         <li class="mb-2">🏆 Pontos no Campeonato: <strong
                                             class="text-success">@Model.TotalPontos</strong></li>
                                             <li class="mb-2">📅 Fundação: <strong>@(Model.Equipa.AnoFundacao.HasValue?
-                                                                                                                                        Model.Equipa.AnoFundacao.ToString() : "Não especificado")</strong></li>
+                                                                                                                                                                                                                                                                            Model.Equipa.AnoFundacao.ToString() : "Não especificado")</strong></li>
                                                 <li>👥 Número de Pilotos: <strong>@Model.Equipa.Pilotos.Count</strong></li>
                                             </ul>
                                         </div>

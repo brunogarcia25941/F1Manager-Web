@@ -1,0 +1,281 @@
+@page "{id:int}"
+@model F1Manager.Web.Pages.Corridas.GerirLiveModel
+@{
+    ViewData["Title"] = "Simulação da Corrida em Direto";
+}
+
+<div class="container mt-4">
+    <!-- Cabeçalho -->
+    <div class="border-bottom pb-2 mb-4">
+        <h1 class="display-5 fw-bold">🏎️ Simulação em Direto: @Model.Corrida.NomeGrandePremio</h1>
+        <p class="text-muted">Gestão de ultrapassagens e voltas em tempo real via SignalR.</p>
+    </div>
+
+    <!-- 1. PAINEL DE CONFIGURAÇÃO INICIAL (SETUP) -->
+    <div id="setupPanel" class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            <h3 class="h5 mb-0">Configuração do Grid de Partida</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label for="inputTotalVoltas" class="form-label fw-bold">Número Total de Voltas:</label>
+                    <input type="number" id="inputTotalVoltas" class="form-control" value="50" min="1" max="100" />
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="h6 mb-0">Selecione os Pilotos Participantes:</h4>
+                <div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                            onclick="toggleSelectAll(true)">Selecionar Todos</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                            onclick="toggleSelectAll(false)">Desmarcar Todos</button>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-2 mb-4" style="max-height: 350px; overflow-y: auto;">
+                @foreach (var p in Model.Pilotos)
+                {
+                    <div class="col">
+                        <div class="form-check p-2 border rounded bg-light">
+                            <input class="form-check-input ms-1 pilot-checkbox" type="checkbox" value="@p.Id"
+                                   id="chkPilot_@p.Id" data-nome="@p.Nome"
+                                   data-equipa="@(p.Equipa != null ?
+                                                                                                                                                                                                                    p.Equipa.Nome : "Sem Equipa")"
+                                   checked />
+                            <label class="form-check-label ms-2 fw-semibold" for="chkPilot_@p.Id">
+                                @p.Nome <small class="text-muted">(@(p.Equipa != null ? p.Equipa.Nome : "Sem Equipa"))</small>
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn btn-success btn-lg w-100" onclick="iniciarCorrida()">🟢 Iniciar Corrida em
+                Direto</button>
+            </div>
+        </div>
+
+        <!-- 2. PAINEL DE GESTÃO DA CORRIDA (LIVE) -->
+        <div id="livePanel" class="card shadow-sm" style="display: none;">
+            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                <h3 class="h5 mb-0">🏁 Corrida a Decorrer</h3>
+                <span class="badge bg-light text-danger fs-6 fw-bold" id="lapDisplay">Volta 1 de 50</span>
+            </div>
+            <div class="card-body">
+                <!-- Controlos da Volta -->
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <span class="fw-bold">Alterar Volta Atual:</span>
+                    <button type="button" class="btn btn-outline-dark" onclick="alterarVolta(-1)">- 1 Volta</button>
+                    <button type="button" class="btn btn-outline-dark" onclick="alterarVolta(1)">+ 1 Volta</button>
+                </div>
+
+                <!-- Tabela de Classificação Interativa -->
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center" style="width: 80px;">Posição</th>
+                                <th>Piloto</th>
+                                <th>Equipa</th>
+                                <th style="width: 200px;">Ultrapassagens</th>
+                                <th>Tempo Volta Mais Rápida</th>
+                            </tr>
+                        </thead>
+                        <tbody id="liveTableBody">
+                            <!-- Linhas geradas via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Formulário Invisível para Enviar os Resultados Finais para o Servidor -->
+                <form id="formFinal" method="post" class="mt-4">
+                    <div id="hiddenInputsContainer"></div>
+                    <button type="submit" class="btn btn-danger btn-lg w-100" onclick="prepararSubmissao(event)">🏁
+                        Finalizar Corrida e Gravar na Base de Dados</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @section Scripts {
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+            <script>
+                const corridaId = @Model.Corrida.Id;
+                let totalVoltas = 50;
+                let voltaAtual = 1;
+                let listaPilotos = [];
+
+                // Conecta ao SignalR Hub
+                const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/raceHub")
+                .withAutomaticReconnect()
+                .build();
+
+                connection.start()
+                .then(() => {
+                // Ao ligar, verifica se o servidor já tem uma sessão iniciada na memória para este GP
+                connection.invoke("GetRaceState", corridaId).then((state) => {
+                if (state && state.iniciada) {
+                carregarEstadoExistente(state);
+                }
+                });
+                })
+                .catch(err => console.error("Erro ao ligar ao SignalR:", err.toString()));
+
+                // Ouve atualizações de classificação
+                connection.on("ReceiveRaceUpdateLive", (pilotos) => {
+                listaPilotos = pilotos;
+                renderizarTabela();
+                });
+
+                // Ouve atualizações da volta
+                connection.on("ReceiveLapUpdate", (lap) => {
+                voltaAtual = lap;
+                document.getElementById("lapDisplay").innerText = `Volta ${voltaAtual} de ${totalVoltas}`;
+                });
+
+                function toggleSelectAll(select) {
+                document.querySelectorAll(".pilot-checkbox").forEach(chk => chk.checked = select);
+                }
+
+                function iniciarCorrida() {
+                totalVoltas = parseInt(document.getElementById("inputTotalVoltas").value) || 50;
+                const checkboxes = document.querySelectorAll(".pilot-checkbox:checked");
+
+                if (checkboxes.length === 0) {
+                alert("Por favor, selecione pelo menos um piloto para participar na corrida.");
+                return;
+                }
+
+                listaPilotos = [];
+                checkboxes.forEach((chk, index) => {
+                listaPilotos.push({
+                pilotoId: parseInt(chk.value),
+                nome: chk.getAttribute("data-nome"),
+                equipaNome: chk.getAttribute("data-equipa"),
+                posicaoFinal: index + 1,
+                tempoVoltaRapida: "--:--.---"
+                });
+                });
+
+                // Obtém o nome do GP vindo do modelo C#
+                const nomeGP = "@Html.Raw(Model.Corrida.NomeGrandePremio)";
+
+                // Envia o grid inicial via SignalR
+                connection.invoke("StartRace", corridaId, nomeGP, totalVoltas, listaPilotos)
+                .then(() => {
+                document.getElementById("setupPanel").style.display = "none";
+                document.getElementById("livePanel").style.display = "block";
+                document.getElementById("lapDisplay").innerText = `Volta ${voltaAtual} de ${totalVoltas}`;
+                renderizarTabela();
+                })
+                .catch(err => console.error("Erro ao iniciar a corrida no SignalR:", err));
+                }
+
+                function carregarEstadoExistente(state) {
+                totalVoltas = state.totalVoltas !== undefined ? state.totalVoltas : state.TotalVoltas;
+                voltaAtual = state.voltaAtual !== undefined ? state.voltaAtual : state.VoltaAtual;
+                listaPilotos = state.pilotos || state.Pilotos;
+
+                document.getElementById("setupPanel").style.display = "none";
+                document.getElementById("livePanel").style.display = "block";
+                document.getElementById("lapDisplay").innerText = `Volta ${voltaAtual} de ${totalVoltas}`;
+                renderizarTabela();
+                }
+
+                function renderizarTabela() {
+                const tbody = document.getElementById("liveTableBody");
+                tbody.innerHTML = "";
+
+                listaPilotos.forEach((p, index) => {
+                const pilotoId = p.pilotoId !== undefined ? p.pilotoId : p.PilotoId;
+                const nome = p.nome || p.Nome;
+                const equipaNome = p.equipaNome || p.EquipaNome;
+                const tempoVolta = p.tempoVoltaRapida !== undefined ? p.tempoVoltaRapida : p.TempoVoltaRapida;
+                const row = document.createElement("tr");
+
+                // Botões de reordenação (subir/descer)
+                const btnSubir = `<button type="button" class="btn btn-sm btn-outline-success" onclick="moverPiloto(${p.pilotoId}, true)" ${index === 0 ? 'disabled' : ''}>▲
+                Subir</button>`;
+                const btnDescer = `<button type="button" class="btn btn-sm btn-outline-danger" onclick="moverPiloto(${p.pilotoId}, false)" ${index === listaPilotos.length - 1 ?
+                'disabled' : ''}>▼ Descer</button>`;
+
+                row.innerHTML = `
+                <td class="text-center fw-bold fs-5">${index + 1}º</td>
+                <td class="fw-bold fs-6">${nome}</td>
+                <td>${equipaNome}</td>
+                <td>
+                <div class="d-flex gap-1">
+                ${btnSubir}
+                ${btnDescer}
+                </div>
+                </td>
+                <td>
+                <input type="text" class="form-control form-control-sm" style="width: 120px;"
+                value="${tempoVolta !== "--:--.---" ? tempoVolta : ''}" placeholder="--:--.---"
+                onchange="atualizarTempoVolta(${pilotoId}, this.value)" />
+                </td>
+                `;
+                tbody.appendChild(row);
+                });
+                }
+
+                function moverPiloto(pilotoId, subir) {
+                connection.invoke("ChangePosition", corridaId, pilotoId, subir)
+                .catch(err => console.error("Erro ao mover piloto:", err));
+                }
+
+                function alterarVolta(delta) {
+                let novaVolta = voltaAtual + delta;
+                if (novaVolta < 1 || novaVolta > totalVoltas) return;
+
+                connection.invoke("UpdateLap", corridaId, novaVolta)
+                .catch(err => console.error("Erro ao atualizar a volta:", err));
+                }
+
+                function atualizarTempoVolta(pilotoId, tempo) {
+                connection.invoke("UpdateFastestLap", corridaId, pilotoId, tempo)
+                .catch(err => console.error("Erro ao atualizar tempo da volta rápida:", err));
+                }
+
+                function prepararSubmissao(event) {
+                event.preventDefault(); // Atrasa o envio para mapear os dados
+
+                if (!confirm("Tem a certeza que deseja terminar e gravar permanentemente estes resultados na base de dados?")) {
+                return;
+                }
+
+                const container = document.getElementById("hiddenInputsContainer");
+                container.innerHTML = "";
+
+                // Cria inputs escondidos com a ordem final exata (1º ao último)
+                listaPilotos.forEach((p) => {
+                const pilotoId = p.pilotoId !== undefined ? p.pilotoId : p.PilotoId;
+                const tempoVolta = p.tempoVoltaRapida !== undefined ? p.tempoVoltaRapida : p.TempoVoltaRapida;
+                const inputId = document.createElement("input");
+                inputId.type = "hidden";
+                inputId.name = "FinalPilotoIds";
+                inputId.value = pilotoId;
+                container.appendChild(inputId);
+
+                const inputTempo = document.createElement("input");
+                inputTempo.type = "hidden";
+                inputTempo.name = "FinalTempos";
+                inputTempo.value = tempoVolta;
+                container.appendChild(inputTempo);
+                });
+
+                // Envia evento de encerramento do Live e submete o formulário à página
+                connection.invoke("EndRace", corridaId)
+                .then(() => {
+                document.getElementById("formFinal").submit();
+                })
+                .catch(err => {
+                console.error("Erro ao encerrar a transmissão live:", err);
+                document.getElementById("formFinal").submit();
+                });
+                }
+            </script>
+        }
