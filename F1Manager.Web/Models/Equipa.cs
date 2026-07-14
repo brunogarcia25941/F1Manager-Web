@@ -27,6 +27,10 @@ namespace F1Manager.Web.Models
         // Guarda o caminho relativo do logótipo da equipa no servidor
         public string? Logotipo { get; set; }
 
+        // LIGAÇÃO AO IDENTITY (Autenticação)
+        // Cada equipa tem uma conta própria que pode gerir a sua página e a dos seus pilotos
+        public string? UserId { get; set; }
+
         // Relacionamento 1-para-Muitos: Uma equipa tem vários pilotos
         public virtual ICollection<Piloto> Pilotos { get; set; } = new List<Piloto>();
     }

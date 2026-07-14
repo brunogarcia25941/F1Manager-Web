@@ -1,0 +1,129 @@
+@page
+@model VincularEquipaModel
+@{
+    ViewData["Title"] = "Vincular Equipa a Utilizador";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Vincular Equipa a Utilizador</h1>
+            <p class="text-muted">Associe uma conta de utilizador a uma equipa específica</p>
+
+            <form method="post" class="mt-4">
+                <div class="form-group mb-3">
+                    <label for="utilizadorId" class="form-label">Selecione o Utilizador:</label>
+                    <select name="utilizadorId" id="utilizadorId" class="form-select" required onchange="this.form.submit()">
+                        <option value="">-- Escolha um utilizador --</option>
+                        @foreach (var user in Model.Utilizadores)
+                        {
+                            <option value="@user.Id" selected="@(Model.UtilizadorSelecionadoId == user.Id)">
+                                @user.Email
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                @if (Model.UtilizadorSelecionado != null)
+                {
+                    <div class="alert alert-info mt-4">
+                        <strong>Utilizador Selecionado:</strong> @Model.UtilizadorSelecionado.Email
+                        <br />
+                        <strong>Roles Atuais:</strong> @string.Join(", ", Model.RolesUtilizador)
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="equipaId" class="form-label">Selecione a Equipa:</label>
+                        <select name="equipaId" id="equipaId" class="form-select" required>
+                            <option value="">-- Escolha uma equipa --</option>
+                            @foreach (var equipa in Model.Equipas)
+                            {
+                                <option value="@equipa.Id" selected="@(Model.EquipaSelecionadaId == equipa.Id)">
+                                    @equipa.Nome
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    @if (Model.EquipaSelecionada != null)
+                    {
+                        <div class="alert alert-warning">
+                            <strong>⚠️ Atenção:</strong> Esta equipa @(string.IsNullOrEmpty(Model.EquipaSelecionada.UserId) ? "NÃO possui" : "já possui") uma conta associada.
+                            @if (!string.IsNullOrEmpty(Model.EquipaSelecionada.UserId))
+                            {
+                                <br />
+                                <small>Ao vincular, a conta anterior será substituída.</small>
+                            }
+                        </div>
+
+                        <button type="submit" name="command" value="vincular" class="btn btn-primary">
+                            <i class="bi bi-link-45deg"></i> Vincular Equipa
+                        </button>
+                        <a href="/Admin/Gerenciar/Equipas" class="btn btn-secondary">Cancelar</a>
+                    }
+                    else
+                    {
+                        <button type="submit" name="command" value="vincular" class="btn btn-primary" disabled>
+                            <i class="bi bi-link-45deg"></i> Vincular Equipa
+                        </button>
+                    }
+                }
+            </form>
+
+            <hr class="my-5" />
+
+            <h3 class="mt-5">Equipas Atualmente Vinculadas</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Equipa</th>
+                            <th>Email do Utilizador</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.EquipasVinculadas.Any())
+                        {
+                            @foreach (var equipa in Model.EquipasVinculadas)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@equipa.Nome</strong>
+                                    </td>
+                                    <td>
+                                        @(string.IsNullOrEmpty(equipa.EmailUtilizador) ? "Sem conta" : equipa.EmailUtilizador)
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(equipa.EmailUtilizador))
+                                        {
+                                            <form method="post" style="display: inline;">
+                                                <input type="hidden" name="equipaId" value="@equipa.EquipaId" />
+                                                <button type="submit" name="command" value="desvincular" class="btn btn-sm btn-danger" onclick="return confirm('Tem a certeza? A equipa perderá acesso ao painel.')">
+                                                    Desvincular
+                                                </button>
+                                            </form>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Nenhuma equipa vinculada</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+</style>

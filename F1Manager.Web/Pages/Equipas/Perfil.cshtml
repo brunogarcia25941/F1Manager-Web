@@ -1,0 +1,154 @@
+@page
+@model F1Manager.Web.Pages.Equipas.PerfilModel
+@{
+    ViewData["Title"] = "Perfil da Equipa";
+}
+
+<div class="container py-5">
+    @if (!Model.TemEquipaAssociada)
+    {
+        <div class="alert alert-warning text-center shadow-sm" role="alert">
+            <h4 class="alert-heading fw-bold">⚠️ Conta Não Associada</h4>
+            <p class="mb-0">A sua conta de utilizador ainda não foi vinculada a nenhuma equipa oficial pelo administrador da
+                plataforma.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-dark text-white p-4">
+                        <h2 class="h4 mb-0">🏁 Perfil da Equipa - @Model.Equipa.Nome</h2>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Equipa.Id" />
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                            <div class="row align-items-center mb-4">
+                                <div class="col-md-3 text-center mb-3 mb-md-0">
+                                    @if (!string.IsNullOrEmpty(Model.Equipa.Logotipo))
+                                    {
+                                        <img src="@Model.Equipa.Logotipo" class="img-thumbnail rounded"
+                                             style="width: 150px; height: 150px; object-fit: cover;" alt="Logo da Equipa" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center mx-auto"
+                                             style="width: 150px; height: 150px; font-size: 3rem;">
+                                            @Model.Equipa.Nome.Substring(0, 1)
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-md-9">
+                                    <h3 class="h4 fw-bold">@Model.Equipa.Nome</h3>
+                                    <p class="text-muted mb-1">Motor: <strong>@Model.Equipa.FabricanteMotor</strong></p>
+                                    <p class="text-muted mb-0">País: <strong>@Model.Equipa.Pais</strong></p>
+                                </div>
+                            </div>
+
+                            <hr />
+
+                            <!-- Upload de Logo -->
+                            <div class="mb-3">
+                                <label asp-for="LogotipoUpload" class="form-label fw-bold">Alterar Logótipo</label>
+                                <input asp-for="LogotipoUpload" type="file" class="form-control" accept="image/*" />
+                                <small class="text-muted">Formatos: JPG, PNG. Tamanho máx: 2MB</small>
+                                <span asp-validation-for="LogotipoUpload" class="text-danger"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Equipa.Nome" class="form-label fw-bold">Nome da Equipa</label>
+                                    <input asp-for="Equipa.Nome" class="form-control" />
+                                    <span asp-validation-for="Equipa.Nome" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Equipa.FabricanteMotor" class="form-label fw-bold">Fabricante de Motor</label>
+                                    <input asp-for="Equipa.FabricanteMotor" class="form-control" />
+                                    <span asp-validation-for="Equipa.FabricanteMotor" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Equipa.Pais" class="form-label fw-bold">País</label>
+                                    <input asp-for="Equipa.Pais" class="form-control" />
+                                    <span asp-validation-for="Equipa.Pais" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Equipa.ChefeEquipa" class="form-label fw-bold">Chefe de Equipa</label>
+                                    <input asp-for="Equipa.ChefeEquipa" class="form-control" />
+                                    <span asp-validation-for="Equipa.ChefeEquipa" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Equipa.AnoFundacao" class="form-label fw-bold">Ano de Fundação</label>
+                                    <input asp-for="Equipa.AnoFundacao" type="number" class="form-control" />
+                                    <span asp-validation-for="Equipa.AnoFundacao" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Equipa.Historia" class="form-label fw-bold">História da Equipa</label>
+                                <textarea asp-for="Equipa.Historia" class="form-control" rows="4"
+                                          placeholder="Escreva a história e informações sobre a sua equipa..."></textarea>
+                                <span asp-validation-for="Equipa.Historia" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="@Url.Page("/Equipas/Index")" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">💾 Guardar Alterações</button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4" />
+
+                        <!-- Secção de Pilotos -->
+                        <div class="mt-5">
+                            <h4 class="h5 fw-bold mb-3">👥 Pilotos da Equipa</h4>
+                            @if (Model.Pilotos.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Número</th>
+                                                <th>Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var piloto in Model.Pilotos)
+                                            {
+                                                <tr>
+                                                    <td><strong>@piloto.Nome</strong></td>
+                                                    <td><span class="badge bg-dark">#@piloto.NumeroCarro</span></td>
+                                                    <td>
+                                                        <a href="@Url.Page("/Equipas/EditarPiloto", new { id = piloto.Id })" 
+                                                           class="btn btn-sm btn-warning">✏️ Editar</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Nenhum piloto registado na equipa.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

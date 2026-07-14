@@ -1,0 +1,93 @@
+@page
+@model F1Manager.Web.Pages.Admin.Utilizadores.IndexModel
+@{
+    ViewData["Title"] = "Gerir Utilizadores";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3">👥 Gerir Utilizadores</h1>
+                <p class="text-muted">Atribua ou remova roles aos utilizadores</p>
+            </div>
+            <a href="@Url.Page("/Admin/Index")" class="btn btn-secondary">← Voltar ao Dashboard</a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            ✅ @Model.SuccessMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            ❌ @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Email</th>
+                            <th>Utilizador</th>
+                            <th>Roles Atuais</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Utilizadores.Any())
+                        {
+                            @foreach (var util in Model.Utilizadores)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@util.Email</strong>
+                                    </td>
+                                    <td>
+                                        @util.UserName
+                                    </td>
+                                    <td>
+                                        @if (util.Roles.Any())
+                                        {
+                                            @foreach (var role in util.Roles)
+                                            {
+                                                <span class="badge bg-info me-1">@role</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Sem Role</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Page("/Admin/Utilizadores/EditarRoles", new { id = util.Id })" 
+                                           class="btn btn-sm btn-primary">
+                                            🔧 Editar Roles
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    Nenhum utilizador registado
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

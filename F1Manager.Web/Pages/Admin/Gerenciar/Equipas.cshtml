@@ -1,0 +1,74 @@
+@page
+@model F1Manager.Web.Pages.Admin.Gerenciar.EquipasModel
+@{
+    ViewData["Title"] = "Gerir Equipas";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3">🏁 Gerir Equipas</h1>
+                <p class="text-muted">Lista de equipas registadas na plataforma</p>
+            </div>
+            <a href="@Url.Page("/Admin/Index")" class="btn btn-secondary">← Voltar</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Motor</th>
+                            <th>País</th>
+                            <th>Pilotos</th>
+                            <th>Conta Associada</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Equipas.Any())
+                        {
+                            @foreach (var equipa in Model.Equipas)
+                            {
+                                <tr>
+                                    <td><strong>@equipa.Nome</strong></td>
+                                    <td>@equipa.FabricanteMotor</td>
+                                    <td>@equipa.Pais</td>
+                                    <td>@equipa.NumeroPilotos</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(equipa.UserId))
+                                        {
+                                            <span class="badge bg-success">Vinculada</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Sem Conta</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Page("/Equipas/Details", new { id = equipa.Id })" 
+                                           class="btn btn-sm btn-info">
+                                            👁️ Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    Nenhuma equipa registada
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

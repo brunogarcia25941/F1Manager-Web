@@ -1,0 +1,65 @@
+@page
+@model F1Manager.Web.Pages.Admin.Gerenciar.CorridasModel
+@{
+    ViewData["Title"] = "Gerir Corridas";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3">🏎️ Gerir Corridas</h1>
+                <p class="text-muted">Lista de corridas registadas na plataforma</p>
+            </div>
+            <a href="@Url.Page("/Admin/Index")" class="btn btn-secondary">← Voltar</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Grande Prémio</th>
+                            <th>Circuito</th>
+                            <th>Data</th>
+                            <th>Campeonato</th>
+                            <th>Pilotos</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Corridas.Any())
+                        {
+                            @foreach (var corrida in Model.Corridas)
+                            {
+                                <tr>
+                                    <td><strong>@corrida.NomeGrandePremio</strong></td>
+                                    <td>@corrida.Circuito</td>
+                                    <td>@corrida.DataHora.ToString("dd/MM/yyyy")</td>
+                                    <td>@corrida.Campeonato</td>
+                                    <td>@corrida.NumeroParticipantes</td>
+                                    <td>
+                                        <a href="@Url.Page("/Corridas/Details", new { id = corrida.Id })" 
+                                           class="btn btn-sm btn-info">
+                                            👁️ Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    Nenhuma corrida registada
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

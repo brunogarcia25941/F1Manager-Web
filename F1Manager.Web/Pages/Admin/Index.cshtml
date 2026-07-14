@@ -1,0 +1,150 @@
+@page
+@model F1Manager.Web.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Painel de Administrador";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3">⚙️ Painel de Administrador</h1>
+            <p class="text-muted">Gerencie utilizadores, roles e dados da plataforma</p>
+        </div>
+    </div>
+
+    @if (!Model.IsAdmin)
+    {
+        <div class="alert alert-danger text-center" role="alert">
+            <h4 class="alert-heading">❌ Acesso Negado</h4>
+            <p>Apenas administradores podem aceder a esta página.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4 mb-4">
+            <!-- Cartão: Utilizadores -->
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h2 class="display-6 text-primary mb-2">@Model.TotalUtilizadores</h2>
+                        <p class="text-muted mb-3">Utilizadores Registados</p>
+                        <a href="@Url.Page("/Admin/Utilizadores/Index")" class="btn btn-sm btn-primary">
+                            👥 Ver Utilizadores
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartão: Equipas -->
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h2 class="display-6 text-success mb-2">@Model.TotalEquipas</h2>
+                        <p class="text-muted mb-3">Equipas</p>
+                        <a href="@Url.Page("/Admin/Gerenciar/Equipas")" class="btn btn-sm btn-success">
+                            🏁 Ver Equipas
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartão: Pilotos -->
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h2 class="display-6 text-info mb-2">@Model.TotalPilotos</h2>
+                        <p class="text-muted mb-3">Pilotos</p>
+                        <a href="@Url.Page("/Admin/Gerenciar/Pilotos")" class="btn btn-sm btn-info">
+                            👤 Ver Pilotos
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartão: Corridas -->
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h2 class="display-6 text-warning mb-2">@Model.TotalCorridas</h2>
+                        <p class="text-muted mb-3">Corridas</p>
+                        <a href="@Url.Page("/Admin/Gerenciar/Corridas")" class="btn btn-sm btn-warning">
+                            🏎️ Ver Corridas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Utilizadores por Role -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-dark text-white p-3">
+                        <h5 class="mb-0">Utilizadores por Role</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.UtilizadoresPorRole.Any())
+                        {
+                            <div class="list-group">
+                                @foreach (var role in Model.UtilizadoresPorRole)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>@role.Key</span>
+                                        <span class="badge bg-primary rounded-pill">@role.Value</span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Nenhum utilizador registado.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-dark text-white p-3">
+                        <h5 class="mb-0">⚡ Ações Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <a href="@Url.Page("/Admin/Utilizadores/Index")" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Gerir Utilizadores e Roles</span>
+                                    <span>→</span>
+                                </div>
+                            </a>
+                            <a href="@Url.Page("/Admin/Gerenciar/Equipas")" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Gerir Equipas</span>
+                                    <span>→</span>
+                                </div>
+                            </a>
+                            <a href="@Url.Page("/Admin/Gerenciar/Pilotos")" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Gerir Pilotos</span>
+                                    <span>→</span>
+                                </div>
+                            </a>
+                            <a href="@Url.Page("/Admin/Gerenciar/Corridas")" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Gerir Corridas</span>
+                                    <span>→</span>
+                                </div>
+                            </a>
+                            <a href="@Url.Page("/Admin/Gerenciar/VincularEquipa")" class="list-group-item list-group-item-action bg-light">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><strong>🔗 Vincular Equipa a Utilizador</strong></span>
+                                    <span>→</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

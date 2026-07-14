@@ -14,7 +14,7 @@ namespace F1Manager.Web.Data
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
             // 1. Criar os Roles se não existirem
-            string[] roleNames = { "Administrador", "Piloto" };
+            string[] roleNames = { "Administrador", "Piloto", "Equipa" };
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);

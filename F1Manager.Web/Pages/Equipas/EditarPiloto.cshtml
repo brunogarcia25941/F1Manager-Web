@@ -1,0 +1,80 @@
+@page "{id:int}"
+@model F1Manager.Web.Pages.Equipas.EditarPilotoModel
+@{
+    ViewData["Title"] = "Editar Piloto";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white p-4">
+                    <h2 class="h4 mb-0">✏️ Editar Piloto - @Model.Piloto.Nome</h2>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Piloto.Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Piloto.Nome" class="form-label fw-bold">Nome do Piloto</label>
+                                <input asp-for="Piloto.Nome" class="form-control" />
+                                <span asp-validation-for="Piloto.Nome" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Piloto.NumeroCarro" class="form-label fw-bold">Número do Carro</label>
+                                <input asp-for="Piloto.NumeroCarro" type="number" class="form-control" />
+                                <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Piloto.Peso" class="form-label fw-bold">Peso (kg)</label>
+                                <input asp-for="Piloto.Peso" type="number" step="0.1" class="form-control" />
+                                <span asp-validation-for="Piloto.Peso" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Piloto.Biografia" class="form-label fw-bold">Biografia</label>
+                            <textarea asp-for="Piloto.Biografia" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Piloto.Biografia" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="FotoUpload" class="form-label fw-bold">Foto de Perfil</label>
+                            @if (!string.IsNullOrEmpty(Model.Piloto.FotoPerfil))
+                            {
+                                <div class="mb-2">
+                                    <img src="@Model.Piloto.FotoPerfil" class="img-thumbnail rounded-circle" 
+                                         style="width: 120px; height: 120px; object-fit: cover;" alt="Foto Atual" />
+                                </div>
+                            }
+                            <input type="file" id="FotoUpload" name="FotoUpload" class="form-control" accept="image/*" />
+                            <small class="text-muted">Formatos: JPG, PNG. Tamanho máx: 2MB</small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="@Url.Page("/Equipas/Perfil")" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">💾 Guardar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

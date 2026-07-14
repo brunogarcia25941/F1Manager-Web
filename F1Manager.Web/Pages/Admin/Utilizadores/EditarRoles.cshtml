@@ -1,0 +1,68 @@
+@page "{id}"
+@model F1Manager.Web.Pages.Admin.Utilizadores.EditarRolesModel
+@{
+    ViewData["Title"] = "Editar Roles";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3">🔧 Editar Roles - @Model.Utilizador.Email</h1>
+            <p class="text-muted">Selecione as roles que este utilizador deve ter</p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            ✅ @Model.SuccessMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            ❌ @Model.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form method="post">
+                        <input type="hidden" asp-for="Utilizador.Id" />
+
+                        <div class="mb-4">
+                            <p class="text-muted">
+                                <strong>Email:</strong> @Model.Utilizador.Email<br>
+                                <strong>Utilizador:</strong> @Model.Utilizador.UserName
+                            </p>
+                        </div>
+
+                        <h5 class="mb-3">Roles Disponíveis</h5>
+
+                        @foreach (var role in Model.RolesDisponiveis)
+                        {
+                            var isChecked = Model.RolesSelecionadas.Contains(role);
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="RolesSelecionadas" 
+                                       value="@role" id="role_@role" @(isChecked ? "checked" : "") />
+                                <label class="form-check-label" for="role_@role">
+                                    @role
+                                </label>
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a href="@Url.Page("/Admin/Utilizadores/Index")" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">💾 Guardar Roles</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
