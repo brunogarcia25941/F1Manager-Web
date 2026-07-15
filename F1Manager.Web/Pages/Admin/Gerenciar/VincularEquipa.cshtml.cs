@@ -32,8 +32,8 @@ namespace F1Manager.Web.Pages.Admin.Gerenciar
 
         public async Task OnGetAsync(string? utilizadorId = null, int? equipaId = null)
         {
-            // Carregar todos os utilizadores
-            Utilizadores = _userManager.Users.ToList();
+            // Carregar apenas os utilizadores que têm o role 'Equipa'
+            Utilizadores = (await _userManager.GetUsersInRoleAsync("Equipa")).ToList();
 
             // Carregar todas as equipas
             Equipas = _context.Equipas.ToList();
@@ -93,8 +93,7 @@ namespace F1Manager.Web.Pages.Admin.Gerenciar
                 }
 
                 // Verificar se o utilizador tem o role "Equipa"
-                var roles = await _userManager.GetRolesAsync(utilizador);
-                if (!roles.Contains("Equipa"))
+                if (!await _userManager.IsInRoleAsync(utilizador, "Equipa"))
                 {
                     ModelState.AddModelError("", "O utilizador deve ter o role 'Equipa' atribuído antes de vincular a uma equipa.");
                     await OnGetAsync(utilizadorId, equipaId);
