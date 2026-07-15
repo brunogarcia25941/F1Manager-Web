@@ -19,6 +19,63 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="card border-success shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">📊 Corridas</h5>
+                            <p class="display-6 mb-0">@Model.TotalCorridas</p>
+                            <p class="text-muted mb-0">Corridas no campeonato</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-primary shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🏁 Resultados</h5>
+                            <p class="display-6 mb-0">@Model.TotalResultados</p>
+                            <p class="text-muted mb-0">Pilotos com resultado</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-warning shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🥇 Mais Vitórias</h5>
+                            @if (Model.MaisVitorias != null)
+                            {
+                                <p class="mb-1 fw-bold">@Model.MaisVitorias.NomePiloto</p>
+                                <p class="mb-0">@Model.MaisVitorias.Vitorias vitórias</p>
+                            }
+                            else
+                            {
+                                <p class="mb-0 text-muted">Sem dados suficientes</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-info shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🏎️ Mais Corridas Terminadas</h5>
+                            @if (Model.MaisCorridasTerminadas != null)
+                            {
+                                <p class="mb-1 fw-bold">@Model.MaisCorridasTerminadas.NomePiloto</p>
+                                <p class="mb-0">@Model.MaisCorridasTerminadas.CorridasTerminadas corridas</p>
+                            }
+                            else
+                            {
+                                <p class="mb-0 text-muted">Sem dados suficientes</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <!-- Coluna da Classificação (Standings) -->
         <div class="col-md-7 mb-4">
@@ -61,6 +118,75 @@
                             Ainda não há resultados registados neste campeonato.
                         </div>
                     }
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-secondary shadow-sm h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">🥉 Mais Pódios</h5>
+                                    @if (Model.MaisPodios != null)
+                                    {
+                                        <p class="mb-1 fw-bold">@Model.MaisPodios.NomePiloto</p>
+                                        <p class="mb-0">@Model.MaisPodios.Podios pódios</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-0 text-muted">Sem dados suficientes</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-dark shadow-sm h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">⚡ Mais Voltas Rápidas</h5>
+                                    @if (Model.MaisVoltasRapidas != null)
+                                    {
+                                        <p class="mb-1 fw-bold">@Model.MaisVoltasRapidas.NomePiloto</p>
+                                        <p class="mb-0">@Model.MaisVoltasRapidas.VoltasRapidas vezes</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-0 text-muted">Sem dados suficientes</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-success shadow-sm h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">📈 Melhor Média de Pontos</h5>
+                                    @if (Model.MaisMediaPontos != null)
+                                    {
+                                        <p class="mb-1 fw-bold">@Model.MaisMediaPontos.NomePiloto</p>
+                                        <p class="mb-0">@Model.MaisMediaPontos.MediaPontos.ToString("0.00") pts média</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-0 text-muted">Sem dados suficientes</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-warning shadow-sm h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">🏆 Equipa com Mais Pontos</h5>
+                                    @if (Model.EquipaMaisPontos != null)
+                                    {
+                                        <p class="mb-1 fw-bold">@Model.EquipaMaisPontos.NomeEquipa</p>
+                                        <p class="mb-0">@Model.EquipaMaisPontos.PontosTotais pontos</p>
+                                        <p class="mb-0 text-muted">Média: @Model.EquipaMaisPontos.MediaPontos.ToString("0.00") pts/resultado</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-0 text-muted">Sem equipa com resultados</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
