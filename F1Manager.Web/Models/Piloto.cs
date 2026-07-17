@@ -9,6 +9,7 @@ namespace F1Manager.Web.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O nome do piloto é obrigatório.")]
+        [StringLength(100, ErrorMessage = "O nome do piloto não pode exceder 100 caracteres.")]
         public string Nome { get; set; }
 
         [Range(1, 99, ErrorMessage = "O número do carro deve estar entre 1 e 99.")]
@@ -16,6 +17,7 @@ namespace F1Manager.Web.Models
 
         // LIGAÇÃO AO IDENTITY (Autenticação)
         // Quando um piloto faz login, guardamos o ID da conta dele para saber que este registo pertence apenas a ele
+        [StringLength(450)]
         public string? UserId { get; set; }
 
         [StringLength(500, ErrorMessage = "A biografia não pode exceder os 500 caracteres.")]

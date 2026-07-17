@@ -4,38 +4,50 @@
     ViewData["Title"] = "Novo Piloto";
 }
 
-<h1>Adicionar Novo Piloto</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 card-f1">
+                <div class="card-header bg-dark text-white p-4">
+                    <h2 class="h4 mb-0">🏎️ Adicionar Piloto</h2>
+                    <small class="text-muted">Insira os dados do novo piloto oficial</small>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        <!-- Mostra erros de validação gerais -->
+                        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Piloto.Nome" class="control-label">Nome do Piloto</label>
-                <input asp-for="Piloto.Nome" class="form-control" />
-                <span asp-validation-for="Piloto.Nome" class="text-danger"></span>
-            </div>
+                        <!-- Nome do Piloto -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Piloto.Nome" class="control-label fw-bold">Nome do Piloto</label>
+                            <input asp-for="Piloto.Nome" class="form-control" placeholder="Ex: Charles Leclerc" />
+                            <span asp-validation-for="Piloto.Nome" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Piloto.NumeroCarro" class="control-label">Número do Carro</label>
-                <input asp-for="Piloto.NumeroCarro" class="form-control" />
-                <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
-            </div>
+                        <!-- Número do Carro -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Piloto.NumeroCarro" class="control-label fw-bold">Número do Carro</label>
+                            <input asp-for="Piloto.NumeroCarro" class="form-control" placeholder="Ex: 16" />
+                            <span asp-validation-for="Piloto.NumeroCarro" class="text-danger"></span>
+                        </div>
 
-            <!-- Dropdown para selecionar a Equipa -->
-            <div class="form-group mb-3">
-                <label asp-for="Piloto.EquipaId" class="control-label">Equipa</label>
-                <select asp-for="Piloto.EquipaId" class="form-control" asp-items="ViewBag.EquipaId">
-                    <option value="">-- Selecione uma Equipa --</option>
-                </select>
-                <span asp-validation-for="Piloto.EquipaId" class="text-danger"></span>
-            </div>
+                        <!-- Dropdown de Seleção da Equipa -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Piloto.EquipaId" class="control-label fw-bold">Equipa / Construtor</label>
+                            <select asp-for="Piloto.EquipaId" class="form-control" asp-items="ViewBag.EquipaId">
+                                <option value="">-- Selecione uma Equipa --</option>
+                            </select>
+                            <span asp-validation-for="Piloto.EquipaId" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <input type="submit" value="Criar" class="btn btn-primary" />
-                <a asp-page="Index" class="btn btn-secondary">Voltar</a>
+                        <!-- Ações do formulário -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <input type="submit" value="Criar Piloto" class="btn btn-f1 w-100 me-2" />
+                            <a asp-page="Index" class="btn btn-secondary py-2 px-3">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>

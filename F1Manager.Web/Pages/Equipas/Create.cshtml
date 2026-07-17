@@ -4,38 +4,49 @@
     ViewData["Title"] = "Nova Equipa";
 }
 
-<h1>Adicionar Nova Equipa</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <!-- Mostra erros gerais do modelo -->
-            <div asp-validation-summary="All" class="text-danger"></div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 card-f1">
+                <div class="card-header bg-dark text-white p-4">
+                    <h2 class="h4 mb-0">🏎️ Adicionar Construtor</h2>
+                    <small class="text-muted">Insira as informações oficiais da nova equipa</small>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        <!-- Mostra erros de validação gerais -->
+                        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Equipa.Nome" class="control-label">Nome da Equipa</label>
-                <input asp-for="Equipa.Nome" class="form-control" />
-                <span asp-validation-for="Equipa.Nome" class="text-danger"></span>
-            </div>
+                        <!-- Nome da Equipa -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Equipa.Nome" class="control-label fw-bold">Nome da Equipa</label>
+                            <input asp-for="Equipa.Nome" class="form-control" placeholder="Ex: Scuderia Ferrari" />
+                            <span asp-validation-for="Equipa.Nome" class="text-danger"></span>
+                        </div>
 
-            <!-- Fabricante de Motor -->
-            <div class="form-group mb-3">
-                <label asp-for="Equipa.FabricanteMotor" class="control-label">Fabricante de Motor</label>
-                <input asp-for="Equipa.FabricanteMotor" class="form-control" />
-                <span asp-validation-for="Equipa.FabricanteMotor" class="text-danger"></span>
-            </div>
+                        <!-- Fabricante de Motor -->
+                        <div class="form-group mb-3">
+                            <label asp-for="Equipa.FabricanteMotor" class="control-label fw-bold">Fabricante de
+                                Motor</label>
+                                <input asp-for="Equipa.FabricanteMotor" class="form-control" placeholder="Ex: Ferrari" />
+                                <span asp-validation-for="Equipa.FabricanteMotor" class="text-danger"></span>
+                            </div>
 
-            <!-- País -->
-            <div class="form-group mb-3">
-                <label asp-for="Equipa.Pais" class="control-label">País</label>
-                <input asp-for="Equipa.Pais" class="form-control" />
-                <span asp-validation-for="Equipa.Pais" class="text-danger"></span>
-            </div>
+                            <!-- País -->
+                            <div class="form-group mb-3">
+                                <label asp-for="Equipa.Pais" class="control-label fw-bold">País da Sede</label>
+                                <input asp-for="Equipa.Pais" class="form-control" placeholder="Ex: Itália" />
+                                <span asp-validation-for="Equipa.Pais" class="text-danger"></span>
+                            </div>
 
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-                <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+                            <!-- Ações do formulário -->
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <input type="submit" value="Criar Equipa" class="btn btn-f1 w-100 me-2" />
+                                <a asp-page="Index" class="btn btn-secondary py-2 px-3">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>

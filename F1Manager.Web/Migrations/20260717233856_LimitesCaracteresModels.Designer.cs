@@ -4,6 +4,7 @@ using F1Manager.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace F1Manager.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260717233856_LimitesCaracteresModels")]
+    partial class LimitesCaracteresModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,8 +115,7 @@ namespace F1Manager.Web.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(450)
-                        .HasColumnType("varchar(450)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -150,8 +152,7 @@ namespace F1Manager.Web.Migrations
                         .HasColumnType("double");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(450)
-                        .HasColumnType("varchar(450)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

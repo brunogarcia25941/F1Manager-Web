@@ -8,10 +8,12 @@ namespace F1Manager.Web.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O nome do Grande Prémio é obrigatório.")]
+        [StringLength(100, ErrorMessage = "O nome do Grande Prémio não pode exceder 100 caracteres.")]
         public string NomeGrandePremio { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O nome do circuito é obrigatório.")]
+        [StringLength(100, ErrorMessage = "O nome do circuito não pode exceder 100 caracteres.")]
         public string Circuito { get; set; }
 
         [Required]

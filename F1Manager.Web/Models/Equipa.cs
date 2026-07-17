@@ -11,8 +11,12 @@ namespace F1Manager.Web.Models
         [StringLength(50)]
         public string Nome { get; set; }
 
+        [Required(ErrorMessage = "O fabricante do motor é obrigatório.")]
+        [StringLength(50, ErrorMessage = "O fabricante do motor não pode exceder 50 caracteres.")]
         public string FabricanteMotor { get; set; }
 
+        [Required(ErrorMessage = "O país é obrigatório.")]
+        [StringLength(50, ErrorMessage = "O país não pode exceder 50 caracteres.")]
         public string Pais { get; set; }
 
         [StringLength(100, ErrorMessage = "O nome do chefe de equipa não pode exceder os 100 caracteres.")]
@@ -29,6 +33,7 @@ namespace F1Manager.Web.Models
 
         // LIGAÇÃO AO IDENTITY (Autenticação)
         // Cada equipa tem uma conta própria que pode gerir a sua página e a dos seus pilotos
+        [StringLength(450)]
         public string? UserId { get; set; }
 
         // Relacionamento 1-para-Muitos: Uma equipa tem vários pilotos

@@ -5,7 +5,7 @@
 }
 <div class="hero-f1 text-center">
     <div class="container">
-        <h1 class="display-3 fw-bold">F1 MANAGER FAN</h1>
+        <h1 class="display-3 fw-bold">F1 MANAGER</h1>
         <p class="lead mb-4">A tua plataforma de gestão e acompanhamento das categorias de elite do
             automobilismo.</p>
             @if (!User.Identity?.IsAuthenticated ?? true)
@@ -14,7 +14,7 @@
             }
             else
             {
-                <a asp-page="/Index" class="btn btn-f1 btn-lg">Ver Painel de Controlo</a>
+                <a asp-page="/Campeonatos/Index" class="btn btn-f1 btn-lg">Ver Campeonatos</a>
             }
         </div>
     </div>
