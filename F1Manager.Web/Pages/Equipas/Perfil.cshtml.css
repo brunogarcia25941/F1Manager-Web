@@ -1,0 +1,334 @@
+.team-perfil-container {
+    width: 100%;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+@media (min-width: 576px) { .team-perfil-container { max-width: 540px; } }
+@media (min-width: 768px) { .team-perfil-container { max-width: 720px; } }
+@media (min-width: 992px) { .team-perfil-container { max-width: 960px; } }
+@media (min-width: 1200px) { .team-perfil-container { max-width: 1140px; } }
+
+.warning-alert-box {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ffeeba;
+    border-radius: 0.25rem;
+    color: #856404;
+    background-color: #fff3cd;
+    text-align: center;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.warning-alert-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.profile-details-row {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-details-col {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .profile-details-col {
+        width: 83.33333333%;
+    }
+}
+
+.profile-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    background-color: #fff;
+}
+
+.profile-card-header {
+    background-color: #212529;
+    color: #fff;
+    padding: 1.5rem;
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
+}
+
+.profile-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+.profile-card-body {
+    padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .profile-card-body {
+        padding: 3rem;
+    }
+}
+
+.profile-intro-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-avatar-container {
+    flex: 0 0 auto;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .profile-avatar-container {
+        width: 25%;
+        margin-bottom: 0;
+    }
+}
+
+.logo-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    background-color: #fff;
+}
+
+.logo-placeholder {
+    width: 150px;
+    height: 150px;
+    font-size: 3rem;
+    background-color: #6c757d;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 0.25rem;
+}
+
+.profile-meta-container {
+    flex: 0 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .profile-meta-container {
+        width: 75%;
+        text-align: left;
+        padding-left: 1.5rem;
+    }
+}
+
+.profile-name {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.profile-meta-text {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.profile-meta-text:last-child {
+    margin-bottom: 0;
+}
+
+.profile-divider {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.profile-form-group {
+    margin-bottom: 1rem;
+}
+
+.profile-form-label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.profile-form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.profile-form-help {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.profile-form-textarea {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    resize: vertical;
+}
+
+.profile-blocks-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.profile-block-col {
+    flex: 1 1 calc(50% - 1.5rem);
+    min-width: 250px;
+}
+
+.form-actions-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.vincular-btn-secondary {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.vincular-btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+.vincular-btn-primary {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #fff;
+    background-color: #0d6efd;
+    border: 1px solid #0d6efd;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.vincular-btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.profile-section {
+    margin-top: 3rem;
+}
+
+.profile-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.vincular-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.vincular-table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+.vincular-table th, .vincular-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.vincular-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.profile-car-number {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    background-color: #212529;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+.team-pilot-btn-edit {
+    display: inline-block;
+    color: #212529;
+    background-color: #ffc107;
+    border: 1px solid #ffc107;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.team-pilot-btn-edit:hover {
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
+
+.profile-empty-text {
+    color: #6c757d;
+}

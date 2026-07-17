@@ -89,21 +89,13 @@ namespace F1Manager.Web.Pages.Pilotos
             // Lógica de Upload de Imagem de Perfil
             if (FotoUpload != null)
             {
-                var folderPath = Path.Combine(_environment.WebRootPath, "uploads");
-                if (!Directory.Exists(folderPath))
+                // Converte a imagem carregada para uma string Base64 e guarda diretamente na base de dados
+                using (var memoryStream = new MemoryStream())
                 {
-                    Directory.CreateDirectory(folderPath);
+                    await FotoUpload.CopyToAsync(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+                    pilotoDb.FotoPerfil = $"data:{FotoUpload.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
                 }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(FotoUpload.FileName);
-                var filePath = Path.Combine(folderPath, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await FotoUpload.CopyToAsync(fileStream);
-                }
-
-                pilotoDb.FotoPerfil = "/uploads/" + uniqueFileName;
             }
 
             // Evita a edição acidental do nome e da equipa no DbContext

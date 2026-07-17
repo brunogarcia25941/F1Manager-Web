@@ -1,0 +1,34 @@
+.col-pos {
+    width: 80px;
+}
+
+.col-num {
+    width: 100px;
+}
+
+.col-points {
+    width: 100px;
+}
+
+.col-actions {
+    width: 120px;
+}
+
+.medal-gold {
+    background-color: #FFD700 !important;
+    min-width: 35px;
+}
+
+.medal-silver {
+    background-color: #C0C0C0 !important;
+    min-width: 35px;
+}
+
+.medal-bronze {
+    background-color: #CD7F32 !important;
+    min-width: 35px;
+}
+
+.display-inline {
+    display: inline;
+}

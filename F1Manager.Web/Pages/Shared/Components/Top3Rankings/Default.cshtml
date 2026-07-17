@@ -1,81 +1,73 @@
 @model IEnumerable<F1Manager.Web.Models.ResultadoCorrida>
 
     @{
-        // Extrair os pilotos do pódio ordenadamente
         var primeiro = Model.FirstOrDefault(r => r.PosicaoFinal == 1);
         var segundo = Model.FirstOrDefault(r => r.PosicaoFinal == 2);
         var terceiro = Model.FirstOrDefault(r => r.PosicaoFinal == 3);
     }
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white text-center">
-            <h5 class="mb-0">🏁 Pódio da Corrida</h5>
+    <div class="podium-card">
+        <div class="podium-header">
+            <h5 class="podium-title">🏁 Pódio da Corrida</h5>
         </div>
-        <div class="card-body">
+        <div class="podium-body">
             @if (Model != null && Model.Any())
             {
-                <!-- Contentor Flexbox alinhado à base (items-end) para dar o efeito de altura de degrau -->
-                <div class="d-flex align-items-end justify-content-center text-center gap-2 py-3" style="min-height: 200px;">
+                <div class="podium-container">
 
                     <!-- 2º Classificado (Esquerda) -->
-                    <div class="d-flex flex-column align-items-center" style="width: 30%;">
+                    <div class="podium-side-column">
                         @if (segundo != null)
                         {
-                            <div class="fw-bold small text-truncate w-100">@segundo.Piloto?.Nome</div>
-                            <div class="text-muted text-truncate w-100" style="font-size: 0.7rem;">
+                            <div class="podium-pilot-name">@segundo.Piloto?.Nome</div>
+                            <div class="podium-team-name">
                                 @(segundo.Piloto?.Equipa?.Nome ?? "Sem Equipa")
                             </div>
                         }
                         else
                         {
-                            <div class="text-muted small">-</div>
-                            <div class="text-muted" style="font-size: 0.7rem;">-</div>
+                            <div class="podium-pilot-placeholder">-</div>
+                            <div class="podium-team-name">-</div>
                         }
-                        <!-- Degrau Prateado -->
-                        <div class="mt-2 w-100 d-flex align-items-center justify-content-center text-dark fw-bold"
-                             style="height: 65px; background: linear-gradient(180deg, #e0e0e0, #a8a8a8); border-radius: 8px 8px 0 0; font-size: 1.3rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                        <div class="podium-step-2nd">
                             2º
                         </div>
                     </div>
 
                     <!-- 1º Classificado (Destaque Central) -->
-                    <div class="d-flex flex-column align-items-center" style="width: 36%;">
+                    <div class="podium-center-column">
                         @if (primeiro != null)
                         {
-                            <div class="fw-bold text-truncate w-100" style="font-size: 0.95rem; color: #d4af37;">👑 @primeiro.Piloto?.Nome</div>
-                            <div class="text-muted text-truncate w-100" style="font-size: 0.7rem;">
+                            <div class="podium-winner-name">👑 @primeiro.Piloto?.Nome</div>
+                            <div class="podium-team-name">
                                 @(primeiro.Piloto?.Equipa?.Nome ?? "Sem Equipa")
                             </div>
                         }
                         else
                         {
-                            <div class="text-muted small">-</div>
-                            <div class="text-muted" style="font-size: 0.7rem;">-</div>
+                            <div class="podium-pilot-placeholder">-</div>
+                            <div class="podium-team-name">-</div>
                         }
-                        <!-- Degrau Dourado -->
-                        <div class="mt-2 w-100 d-flex align-items-center justify-content-center text-dark fw-bold"
-                             style="height: 100px; background: linear-gradient(180deg, #ffe066, #d4af37); border-radius: 8px 8px 0 0; font-size: 1.8rem; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);">
+                        <div class="podium-step-1st">
                             1º
                         </div>
                     </div>
 
                     <!-- 3º Classificado (Direita) -->
-                    <div class="d-flex flex-column align-items-center" style="width: 30%;">
+                    <div class="podium-side-column">
                         @if (terceiro != null)
                         {
-                            <div class="fw-bold small text-truncate w-100">@terceiro.Piloto?.Nome</div>
-                            <div class="text-muted text-truncate w-100" style="font-size: 0.7rem;">
+                            <div class="podium-pilot-name">@terceiro.Piloto?.Nome</div>
+                            <div class="podium-team-name">
                                 @(terceiro.Piloto?.Equipa?.Nome ?? "Sem Equipa")
                             </div>
                         }
                         else
                         {
-                            <div class="text-muted small">-</div>
-                            <div class="text-muted" style="font-size: 0.7rem;">-</div>
+                            <div class="podium-pilot-placeholder">-</div>
+                            <div class="podium-team-name">-</div>
                         }
-                        <!-- Degrau Bronzeado -->
-                        <div class="mt-2 w-100 d-flex align-items-center justify-content-center text-dark fw-bold"
-                             style="height: 40px; background: linear-gradient(180deg, #d27d2d, #8b4513); border-radius: 8px 8px 0 0; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                        <div class="podium-step-3rd">
                             3º
                         </div>
                     </div>
@@ -84,7 +76,7 @@
             }
             else
             {
-                <p class="text-muted mb-0 text-center py-4">Ainda sem resultados oficiais registados nesta corrida.</p>
+                <p class="podium-empty-message">Ainda sem resultados oficiais registados nesta corrida.</p>
             }
         </div>
     </div>

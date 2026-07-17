@@ -20,14 +20,11 @@
                         <div class="col-md-4 text-center mb-3 mb-md-0">
                             @if (!string.IsNullOrEmpty(Model.Equipa.Logotipo))
                             {
-                                <img src="@Model.Equipa.Logotipo" class="img-thumbnail shadow-sm"
-                                     style="max-width: 150px; max-height: 150px; object-fit: contain; border: none; background: transparent;"
-                                     alt="Logótipo de @Model.Equipa.Nome" />
+                                <img src="@Model.Equipa.Logotipo" class="img-thumbnail shadow-sm logo-img" alt="Logótipo de @Model.Equipa.Nome" />
                             }
                             else
                             {
-                                <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center mx-auto shadow-sm"
-                                     style="width: 120px; height: 120px; font-size: 3rem;">
+                                <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center mx-auto shadow-sm logo-placeholder">
                                     🏁
                                 </div>
                             }
@@ -37,62 +34,59 @@
                             <p class="text-muted mb-2">Motorizador: <strong>@Model.Equipa.FabricanteMotor</strong></p>
                             <p class="text-muted mb-0">Chefe de Equipa:
                                 <strong>@(string.IsNullOrEmpty(Model.Equipa.ChefeEquipa) ? "Não especificado" : Model.Equipa.ChefeEquipa)</strong>
-                                </p>
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row g-4 mt-2">
+                        <!-- Bloco de Estatísticas e Pilotos -->
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded border mb-3">
+                                <h4 class="h6 text-muted text-uppercase mb-2">Resumo do Construtor</h4>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2">🏆 Pontos no Campeonato: <strong class="text-success">@Model.TotalPontos</strong></li>
+                                    <li class="mb-2">📅 Fundação: <strong>@(Model.Equipa.AnoFundacao.HasValue ? Model.Equipa.AnoFundacao.ToString() : "Não especificado")</strong></li>
+                                    <li>👥 Número de Pilotos: <strong>@Model.Equipa.Pilotos.Count</strong></li>
+                                </ul>
+                            </div>
+
+                            <div class="p-3 bg-light rounded border">
+                                <h4 class="h6 text-muted text-uppercase mb-2">Pilotos Oficiais</h4>
+                                @if (Model.Equipa.Pilotos.Any())
+                                {
+                                    <div class="list-group">
+                                        @foreach (var piloto in Model.Equipa.Pilotos)
+                                        {
+                                            <a asp-page="/Pilotos/Details" asp-route-id="@piloto.Id"
+                                               asp-route-returnUrl="/Equipas/Details/@Model.Equipa.Id"
+                                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                                <span>#@piloto.NumeroCarro - <strong>@piloto.Nome</strong></span>
+                                                <span class="badge bg-dark rounded-pill">Ver Perfil</span>
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-muted mb-0">Nenhum piloto associado a esta equipa.</p>
+                                }
                             </div>
                         </div>
 
-                        <hr />
-
-                        <div class="row g-4 mt-2">
-                            <!-- Bloco de Estatísticas e Pilotos -->
-                            <div class="col-md-6">
-                                <div class="p-3 bg-light rounded border mb-3">
-                                    <h4 class="h6 text-muted text-uppercase mb-2">Resumo do Construtor</h4>
-                                    <ul class="list-unstyled mb-0">
-                                        <li class="mb-2">🏆 Pontos no Campeonato: <strong
-                                            class="text-success">@Model.TotalPontos</strong></li>
-                                            <li class="mb-2">📅 Fundação: <strong>@(Model.Equipa.AnoFundacao.HasValue?
-                                                                                                                                                                                                                                                                            Model.Equipa.AnoFundacao.ToString() : "Não especificado")</strong></li>
-                                                <li>👥 Número de Pilotos: <strong>@Model.Equipa.Pilotos.Count</strong></li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="p-3 bg-light rounded border">
-                                            <h4 class="h6 text-muted text-uppercase mb-2">Pilotos Oficiais</h4>
-                                            @if (Model.Equipa.Pilotos.Any())
-                                            {
-                                                <div class="list-group">
-                                                    @foreach (var piloto in Model.Equipa.Pilotos)
-                                                    {
-                                                        <a asp-page="/Pilotos/Details" asp-route-id="@piloto.Id"
-                                                           asp-route-returnUrl="/Equipas/Details/@Model.Equipa.Id"
-                                                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                                            <span>#@piloto.NumeroCarro - <strong>@piloto.Nome</strong></span>
-                                                            <span class="badge bg-dark rounded-pill">Ver Perfil</span>
-                                                        </a>
-                                                    }
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <p class="text-muted mb-0">Nenhum piloto associado a esta equipa.</p>
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <!-- Bloco de História -->
-                                    <div class="col-md-6">
-                                        <div class="p-3 bg-light rounded border h-100">
-                                            <h4 class="h6 text-muted text-uppercase mb-2">História / Origem</h4>
-                                            <p class="mb-0 text-secondary"
-                                               style="font-size: 0.95rem; line-height: 1.5; text-align: justify;">
-                                                @(string.IsNullOrEmpty(Model.Equipa.Historia) ? "Esta equipa ainda não tem uma história oficial registada." : Model.Equipa.Historia)
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- Bloco de História -->
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded border h-100">
+                                <h4 class="h6 text-muted text-uppercase mb-2">História / Origem</h4>
+                                <p class="mb-0 text-secondary history-text">
+                                    @(string.IsNullOrEmpty(Model.Equipa.Historia) ? "Esta equipa ainda não tem uma história oficial registada." : Model.Equipa.Historia)
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>

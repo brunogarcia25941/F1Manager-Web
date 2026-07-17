@@ -116,21 +116,13 @@ namespace F1Manager.Web.Pages.Equipas
                     return Page();
                 }
 
-                var folderPath = Path.Combine(_environment.WebRootPath, "uploads", "pilotos");
-                if (!Directory.Exists(folderPath))
+                // Converte a foto do piloto para string Base64 e guarda diretamente na base de dados
+                using (var memoryStream = new MemoryStream())
                 {
-                    Directory.CreateDirectory(folderPath);
+                    await FotoUpload.CopyToAsync(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+                    piloto.FotoPerfil = $"data:{FotoUpload.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
                 }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(FotoUpload.FileName);
-                var filePath = Path.Combine(folderPath, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await FotoUpload.CopyToAsync(stream);
-                }
-
-                piloto.FotoPerfil = $"/uploads/pilotos/{uniqueFileName}";
             }
 
             _context.Pilotos.Update(piloto);

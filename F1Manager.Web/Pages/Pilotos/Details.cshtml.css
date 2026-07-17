@@ -1,0 +1,16 @@
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.profile-placeholder {
+    width: 150px;
+    height: 150px;
+    font-size: 3rem;
+}
+
+.stat-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}

@@ -1,0 +1,19 @@
+.logo-img {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: contain;
+    border: none;
+    background: transparent;
+}
+
+.logo-placeholder {
+    width: 120px;
+    height: 120px;
+    font-size: 3rem;
+}
+
+.history-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: justify;
+}

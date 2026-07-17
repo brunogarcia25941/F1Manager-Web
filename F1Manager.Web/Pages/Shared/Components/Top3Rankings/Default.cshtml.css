@@ -1,0 +1,135 @@
+.podium-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    background-color: #fff;
+}
+
+.podium-header {
+    background-color: #212529;
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
+    text-align: center;
+}
+
+.podium-title {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+}
+
+.podium-body {
+    padding: 1.25rem;
+}
+
+.podium-container {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    min-height: 200px;
+}
+
+.podium-side-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+}
+
+.podium-center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 36%;
+}
+
+.podium-pilot-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.podium-winner-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #d4af37;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.podium-pilot-placeholder {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.podium-team-name {
+    color: #6c757d;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.podium-step-1st {
+    margin-top: 0.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #212529;
+    font-weight: 700;
+    height: 100px;
+    background: linear-gradient(180deg, #ffe066, #d4af37);
+    border-radius: 8px 8px 0 0;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.podium-step-2nd {
+    margin-top: 0.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #212529;
+    font-weight: 700;
+    height: 65px;
+    background: linear-gradient(180deg, #e0e0e0, #a8a8a8);
+    border-radius: 8px 8px 0 0;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.podium-step-3rd {
+    margin-top: 0.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #212529;
+    font-weight: 700;
+    height: 40px;
+    background: linear-gradient(180deg, #d27d2d, #8b4513);
+    border-radius: 8px 8px 0 0;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.podium-empty-message {
+    color: #6c757d;
+    margin-bottom: 0;
+    text-align: center;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}

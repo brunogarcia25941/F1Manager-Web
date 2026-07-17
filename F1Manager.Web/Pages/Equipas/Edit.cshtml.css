@@ -1,0 +1,9 @@
+.logo-preview {
+    max-height: 80px;
+    object-fit: contain;
+    margin-top: 0.25rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    background-color: #fff;
+}

@@ -4,19 +4,18 @@
     ViewData["Title"] = "Calendário de Corridas";
 }
 
-<div class="container">
+<div class="container mt-4">
     <!-- Banner de Corrida em Direto (inicialmente escondido) -->
-    <div id="liveRaceAlert" class="alert alert-danger align-items-center justify-content-between fade show d-none"
-         role="alert">
+    <div id="liveRaceAlert" class="alert alert-danger align-items-center justify-content-between fade show d-none" role="alert">
         <div class="d-flex align-items-center gap-2">
-            <span class="spinner-grow spinner-grow-sm text-danger" role="status" aria-hidden="true"
-                  style="animation-duration: 0.8s;"></span>
+            <span class="spinner-grow spinner-grow-sm text-danger spinner-slow" role="status" aria-hidden="true"></span>
             <div>
                 A corrida <strong id="liveRaceName">GP</strong> está a decorrer em tempo real!
             </div>
         </div>
         <a id="liveRaceLink" href="#" class="btn btn-sm btn-danger fw-bold ms-3">🔴 Ver em Direto</a>
     </div>
+
     <h1 class="display-4">Calendário de Corridas</h1>
 
     @if (User.IsInRole("Administrador"))
@@ -26,27 +25,27 @@
         </p>
     }
 
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>Grande Prémio</th>
-                <th>Circuito</th>
-                <th>Data e Hora</th>
-                <th>Campeonato</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Corridas)
-            {
+    <div class="table-responsive">
+        <table class="table table-striped mt-4">
+            <thead>
                 <tr>
-                    <td class="fw-bold">@item.NomeGrandePremio</td>
-                    <td>@item.Circuito</td>
-                    <td>@item.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@(item.Campeonato != null ? item.Campeonato.Nome : "Sem Campeonato")</td>
-                    <td>
-                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Ver Corrida /
-                            Resultados</a>
+                    <th>Grande Prémio</th>
+                    <th>Circuito</th>
+                    <th>Data e Hora</th>
+                    <th>Campeonato</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Corridas)
+                {
+                    <tr>
+                        <td class="fw-bold">@item.NomeGrandePremio</td>
+                        <td>@item.Circuito</td>
+                        <td>@item.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(item.Campeonato != null ? item.Campeonato.Nome : "Sem Campeonato")</td>
+                        <td>
+                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Ver Corrida / Resultados</a>
                             @if (User.IsInRole("Administrador"))
                             {
                                 <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
@@ -58,38 +57,38 @@
             </tbody>
         </table>
     </div>
+</div>
 
-
-    @section Scripts {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
-        <script>
-            const connection = new signalR.HubConnectionBuilder()
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
             .withUrl("/raceHub")
             .withAutomaticReconnect()
             .build();
 
-            // 1. Escuta o arranque de uma nova simulação
-            connection.on("ReceiveRaceStart", (state) => {
+        // 1. Escuta o arranque de uma nova simulação
+        connection.on("ReceiveRaceStart", (state) => {
             mostrarBanner(state);
-            });
+        });
 
-            // 2. Escuta quando a simulação é finalizada e gravada
-            connection.on("ReceiveRaceEnd", () => {
+        // 2. Escuta quando a simulação é finalizada e gravada
+        connection.on("ReceiveRaceEnd", () => {
             esconderBanner();
-            });
+        });
 
-            // Efetua a ligação e verifica se já existe uma corrida ativa no arranque
-            connection.start()
+        // Efetua a ligação e verifica se já existe uma corrida ativa no arranque
+        connection.start()
             .then(() => {
-            connection.invoke("GetActiveLiveRaces").then((races) => {
-            if (races && races.length > 0) {
-            mostrarBanner(races[0]); // Mostra o banner para o primeiro GP ativo
-            }
-            });
+                connection.invoke("GetActiveLiveRaces").then((races) => {
+                    if (races && races.length > 0) {
+                        mostrarBanner(races[0]);
+                    }
+                });
             })
             .catch(err => console.error(err.toString()));
 
-            function mostrarBanner(state) {
+        function mostrarBanner(state) {
             const banner = document.getElementById("liveRaceAlert");
             const nameSpan = document.getElementById("liveRaceName");
             const link = document.getElementById("liveRaceLink");
@@ -97,15 +96,14 @@
             nameSpan.innerText = state.nomeGrandePremio;
             link.href = `/Corridas/LiveTiming/${state.corridaId}`;
 
-            // Exibe o banner alterando as classes do Bootstrap
             banner.classList.remove("d-none");
             banner.classList.add("d-flex");
-            }
+        }
 
-            function esconderBanner() {
+        function esconderBanner() {
             const banner = document.getElementById("liveRaceAlert");
             banner.classList.add("d-none");
             banner.classList.remove("d-flex");
-            }
-        </script>
-    }
+        }
+    </script>
+}

@@ -1,4 +1,4 @@
-@page
+@page "{id:int}"
 @model F1Manager.Web.Pages.Campeonatos.DetailsModel
 @{
     ViewData["Title"] = "Detalhes do Campeonato";
@@ -7,8 +7,8 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
         <div>
-            <h1 class="display-5 fw-bold">@Model.Campeonato.Nome</h1>
-            <p class="text-muted mb-0">Temporada: <strong>@Model.Campeonato.Ano</strong></p>
+            <h1 class="display-5 fw-bold">🏆 @Model.Campeonato.Nome</h1>
+            <p class="text-muted mb-0">Ano de competição: <strong>@Model.Campeonato.Ano</strong></p>
         </div>
         <div>
             <a asp-page="./Index" class="btn btn-secondary">Voltar para a Lista</a>
@@ -19,337 +19,240 @@
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <div class="card border-success shadow-sm h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">📊 Corridas</h5>
-                            <p class="display-6 mb-0">@Model.TotalCorridas</p>
-                            <p class="text-muted mb-0">Corridas no campeonato</p>
+    <div class="row">
+        <!-- Coluna da Classificação e Estatísticas -->
+        <div class="col-md-7 mb-4">
+            <!-- Três blocos de estatísticas superiores em grelha -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded border text-center h-100 shadow-sm">
+                        <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem;">🏁 Nº de Corridas</h5>
+                        <p class="h3 fw-bold mb-0 text-primary">@Model.Campeonato.Corridas.Count</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded border text-center h-100 shadow-sm">
+                        <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem;">🏆 Líder Pilotos</h5>
+                        @if (Model.Classificacao.Any())
+                        {
+                            var lider = Model.Classificacao.First();
+                            <p class="h6 fw-bold mb-0 text-truncate text-danger" title="@lider.NomePiloto">@lider.NomePiloto</p>
+                            <small class="text-muted">@lider.PontosTotais pts</small>
+                        }
+                        else
+                        {
+                            <p class="h6 fw-bold mb-0 text-muted">Sem dados</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded border text-center h-100 shadow-sm">
+                        <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem;">🏎️ Líder Construtores</h5>
+                        @if (Model.ClassificacaoEquipas.Any())
+                        {
+                            var liderEquipa = Model.ClassificacaoEquipas.First();
+                            <p class="h6 fw-bold mb-0 text-truncate text-success" title="@liderEquipa.NomeEquipa">@liderEquipa.NomeEquipa</p>
+                            <small class="text-muted">@liderEquipa.PontosTotais pts</small>
+                        }
+                        else
+                        {
+                            <p class="h6 fw-bold mb-0 text-muted">Sem dados</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Classificação -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h3 class="h5 mb-0" id="standingsTitle">🏆 Classificação Geral de Pilotos</h3>
+                    <div class="btn-group">
+                        <button id="togglePilotos" onclick="switchStandings('pilotos')"
+                                class="btn btn-sm btn-outline-light active">Pilotos</button>
+                        <button id="toggleEquipas" onclick="switchStandings('equipas')"
+                                class="btn btn-sm btn-outline-light">Equipas</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Tabela de Pilotos -->
+                    <table class="table table-striped table-hover align-middle mb-0" id="standingsPilotos">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center col-pos">Posição</th>
+                                <th>Piloto</th>
+                                <th>Equipa</th>
+                                <th class="text-center col-points">Pontos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int posP = 1;
+                            }
+                            @foreach (var p in Model.Classificacao)
+                            {
+                                <tr>
+                                    <td class="text-center col-pos fw-bold">@posP º</td>
+                                    <td><strong>@p.NomePiloto</strong></td>
+                                    <td>@(string.IsNullOrEmpty(p.NomeEquipa) ? "Sem Equipa" : p.NomeEquipa)</td>
+                                    <td class="text-center fw-bold text-primary">@p.PontosTotais</td>
+                                </tr>
+                                posP++;
+                            }
+                            @if (!Model.Classificacao.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="p-4 text-center text-muted">
+                                        Nenhum resultado registado neste campeonato.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- Tabela de Equipas -->
+                    <table class="table table-striped table-hover align-middle mb-0 d-none" id="standingsEquipas">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center col-pos">Posição</th>
+                                <th>Equipa</th>
+                                <th class="text-center col-points">Pontos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int posE = 1;
+                            }
+                            @foreach (var e in Model.ClassificacaoEquipas)
+                            {
+                                <tr>
+                                    <td class="text-center col-pos fw-bold">@posE º</td>
+                                    <td><strong>@e.NomeEquipa</strong></td>
+                                    <td class="text-center fw-bold text-success">@e.PontosTotais</td>
+                                </tr>
+                                posE++;
+                            }
+                            @if (!Model.ClassificacaoEquipas.Any())
+                            {
+                                <tr>
+                                    <td colspan="3" class="p-4 text-center text-muted">
+                                        Nenhum resultado registado neste campeonato.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Painel de Destaques / Estatísticas Adicionais -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="h6 mb-0 text-uppercase fw-bold tracking-wider">💡 Destaques Adicionais</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded border h-100 text-center">
+                                <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.85rem;">🏆 Piloto com Mais Vitórias</h5>
+                                @if (Model.MaisVitorias != null)
+                                {
+                                    <p class="h5 fw-bold mb-0 text-warning text-truncate" title="@Model.MaisVitorias.NomePiloto">
+                                        @Model.MaisVitorias.NomePiloto
+                                    </p>
+                                    <small class="text-muted">@Model.MaisVitorias.Vitorias vitórias em corridas</small>
+                                }
+                                else
+                                {
+                                    <p class="text-muted mb-0">Sem dados suficientes</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded border h-100 text-center">
+                                <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.85rem;">🏎️ Construtor mais Eficiente</h5>
+                                @if (Model.EquipaMaisPontos != null)
+                                {
+                                    <p class="h5 fw-bold mb-0 text-success text-truncate" title="@Model.EquipaMaisPontos.NomeEquipa">
+                                        @Model.EquipaMaisPontos.NomeEquipa
+                                    </p>
+                                    <small class="text-muted">@Model.EquipaMaisPontos.PontosTotais pts (Média: @Model.EquipaMaisPontos.MediaPontos.ToString("0.00") pts/res)</small>
+                                }
+                                else
+                                {
+                                    <p class="text-muted mb-0">Sem dados suficientes</p>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card border-primary shadow-sm h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">🏁 Resultados</h5>
-                            <p class="display-6 mb-0">@Model.TotalResultados</p>
-                            <p class="text-muted mb-0">Pilotos com resultado</p>
-                        </div>
-                    </div>
+            </div>
+        </div>
+
+        <!-- Coluna do Calendário de Corridas -->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="h5 mb-0">📅 Calendário / Corridas</h3>
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <a asp-page="/Corridas/Create" asp-route-campeonatoId="@Model.Campeonato.Id"
+                           class="btn btn-sm btn-light">Agendar Corrida</a>
+                    }
                 </div>
-                <div class="col-md-3">
-                    <div class="card border-warning shadow-sm h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">🥇 Mais Vitórias</h5>
-                            @if (Model.MaisVitorias != null)
+                <div class="card-body p-0">
+                    @if (Model.Campeonato.Corridas != null && Model.Campeonato.Corridas.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var corrida in Model.Campeonato.Corridas.OrderBy(c => c.DataHora))
                             {
-                                <p class="mb-1 fw-bold">@Model.MaisVitorias.NomePiloto</p>
-                                <p class="mb-0">@Model.MaisVitorias.Vitorias vitórias</p>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">@corrida.NomeGrandePremio</h6>
+                                        <small class="text-muted">🏁 @corrida.Circuito</small>
+                                        <br />
+                                        <small class="text-muted">📅 @corrida.DataHora.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </div>
+                                    <a asp-page="/Corridas/Details" asp-route-id="@corrida.Id"
+                                       class="btn btn-sm btn-outline-secondary">Ver Corrida</a>
+                                </li>
                             }
-                            else
-                            {
-                                <p class="mb-0 text-muted">Sem dados suficientes</p>
-                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            Nenhuma corrida agendada para este campeonato.
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card border-info shadow-sm h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">🏎️ Mais Corridas Terminadas</h5>
-                            @if (Model.MaisCorridasTerminadas != null)
-                            {
-                                <p class="mb-1 fw-bold">@Model.MaisCorridasTerminadas.NomePiloto</p>
-                                <p class="mb-0">@Model.MaisCorridasTerminadas.CorridasTerminadas corridas</p>
-                            }
-                            else
-                            {
-                                <p class="mb-0 text-muted">Sem dados suficientes</p>
-                            }
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <!-- Coluna da Classificação (Pilotos ou Equipas alternável) -->
-        <div class="col-md-7 mb-4">
-            <div class="card shadow-sm">
-                <!-- Cabeçalho com Título Dinâmico e Botões de Alternância -->
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                    <h3 class="h5 mb-0" id="standingsTitle">🏆 Classificação Geral de Pilotos</h3>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-outline-light active" id="togglePilotos"
-                                onclick="switchStandings('pilotos')">Pilotos</button>
-                        <button type="button" class="btn btn-outline-light" id="toggleEquipas"
-                                onclick="switchStandings('equipas')">Equipas</button>
-                    </div>
-                </div>
-                <div class="card-body p-0">
+<script>
+    function switchStandings(type) {
+        const title = document.getElementById('standingsTitle');
+        const listPilotos = document.getElementById('standingsPilotos');
+        const listEquipas = document.getElementById('standingsEquipas');
+        const btnPilotos = document.getElementById('togglePilotos');
+        const btnEquipas = document.getElementById('toggleEquipas');
 
-                    <!-- Secção 1: Classificação de Pilotos -->
-                    <div id="standingsPilotos">
-                        @if (Model.Classificacao.Any())
-                        {
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center" style="width: 80px;">Pos</th>
-                                        <th>Piloto</th>
-                                        <th>Equipa</th>
-                                        <th class="text-center" style="width: 100px;">Pontos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        int pos = 1;
-                                    }
-                                    @foreach (var p in Model.Classificacao)
-                                    {
-                                        <tr>
-                                            <!-- Destaque dourado, prateado e bronze para o pódio -->
-                                            <td class="text-center fw-bold">
-                                                @if (pos == 1)
-                                                {
-                                                    <span class="badge rounded-pill text-dark"
-                                                          style="background-color: #FFD700 !important; min-width: 35px;">1</span>
-                                                }
-                                                else if (pos == 2)
-                                                {
-                                                    <span class="badge rounded-pill text-dark"
-                                                          style="background-color: #C0C0C0 !important; min-width: 35px;">2</span>
-                                                }
-                                                else if (pos == 3)
-                                                {
-                                                    <span class="badge rounded-pill text-white"
-                                                          style="background-color: #CD7F32 !important; min-width: 35px;">3</span>
-                                                }
-                                                else
-                                                {
-                                                    <span>@pos</span>
-                                                }
-                                            </td>
-                                            <td>@p.NomePiloto</td>
-                                            <td>@p.NomeEquipa</td>
-                                            <td class="text-center fw-bold text-primary">@p.PontosTotais</td>
-                                        </tr>
-                                        pos++;
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <div class="p-4 text-center text-muted">
-                                Ainda não há resultados de pilotos registados neste campeonato.
-                            </div>
-                        }
-                    </div>
-
-                    <!-- Secção 2: Classificação de Equipas (Oculta por omissão) -->
-                    <div id="standingsEquipas" class="d-none">
-                        @if (Model.ClassificacaoEquipas.Any())
-                        {
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center" style="width: 80px;">Pos</th>
-                                        <th>Equipa</th>
-                                        <th class="text-center" style="width: 100px;">Pontos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        int posEq = 1;
-                                    }
-                                    @foreach (var eq in Model.ClassificacaoEquipas)
-                                    {
-                                        <tr>
-                                            <!-- Destaque dourado, prateado e bronze para o pódio -->
-                                            <td class="text-center fw-bold">
-                                                @if (posEq == 1)
-                                                {
-                                                    <span class="badge rounded-pill text-dark"
-                                                          style="background-color: #FFD700 !important; min-width: 35px;">1</span>
-                                                }
-                                                else if (posEq == 2)
-                                                {
-                                                    <span class="badge rounded-pill text-dark"
-                                                          style="background-color: #C0C0C0 !important; min-width: 35px;">2</span>
-                                                }
-                                                else if (posEq == 3)
-                                                {
-                                                    <span class="badge rounded-pill text-white"
-                                                          style="background-color: #CD7F32 !important; min-width: 35px;">3</span>
-                                                }
-                                                else
-                                                {
-                                                    <span>@posEq</span>
-                                                }
-                                            </td>
-                                            <td>@eq.NomeEquipa</td>
-                                            <td class="text-center fw-bold text-success">@eq.PontosTotais</td>
-                                        </tr>
-                                        posEq++;
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <div class="p-4 text-center text-muted">
-                                Ainda não há resultados de equipas registados neste campeonato.
-                            </div>
-                        }
-                    </div>
-
-                    <!-- Estatísticas Adicionais (Fixas no fundo) -->
-                    <div class="p-3 border-top bg-light">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="card border-secondary shadow-sm h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">🥉 Mais Pódios</h5>
-                                        @if (Model.MaisPodios != null)
-                                        {
-                                            <p class="mb-1 fw-bold">@Model.MaisPodios.NomePiloto</p>
-                                            <p class="mb-0">@Model.MaisPodios.Podios pódios</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="mb-0 text-muted">Sem dados suficientes</p>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="card border-dark shadow-sm h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">⚡ Mais Voltas Rápidas</h5>
-                                        @if (Model.MaisVoltasRapidas != null)
-                                        {
-                                            <p class="mb-1 fw-bold">@Model.MaisVoltasRapidas.NomePiloto</p>
-                                            <p class="mb-0">@Model.MaisVoltasRapidas.VoltasRapidas vezes</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="mb-0 text-muted">Sem dados suficientes</p>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <div class="card border-success shadow-sm h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">📈 Melhor Média de Pontos</h5>
-                                        @if (Model.MaisMediaPontos != null)
-                                        {
-                                            <p class="mb-1 fw-bold">@Model.MaisMediaPontos.NomePiloto</p>
-                                            <p class="mb-0">@Model.MaisMediaPontos.MediaPontos.ToString("0.00") pts
-                                                média</p>
-                                            }
-                                            else
-                                            {
-                                                <p class="mb-0 text-muted">Sem dados suficientes</p>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-warning shadow-sm h-100">
-                                        <div class="card-body">
-                                            <h5 class="card-title">🏆 Equipa com Mais Pontos</h5>
-                                            @if (Model.EquipaMaisPontos != null)
-                                            {
-                                                <p class="mb-1 fw-bold">@Model.EquipaMaisPontos.NomeEquipa</p>
-                                                <p class="mb-0">@Model.EquipaMaisPontos.PontosTotais pontos</p>
-                                                <p class="mb-0 text-muted">Média:
-                                                    @Model.EquipaMaisPontos.MediaPontos.ToString("0.00") pts/resultado</p>
-                                                }
-                                            else
-                                                {
-                                                    <p class="mb-0 text-muted">Sem equipa com resultados</p>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Coluna do Calendário de Corridas -->
-                <div class="col-md-5 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                            <h3 class="h5 mb-0">📅 Calendário / Corridas</h3>
-                            @if (User.IsInRole("Administrador"))
-                            {
-                                <a asp-page="/Corridas/Create" asp-route-campeonatoId="@Model.Campeonato.Id"
-                                   class="btn btn-sm btn-light">Agendar Corrida</a>
-                            }
-                        </div>
-                        <div class="card-body p-0">
-                            @if (Model.Campeonato.Corridas != null && Model.Campeonato.Corridas.Any())
-                            {
-                                <ul class="list-group list-group-flush">
-                                    @foreach (var corrida in Model.Campeonato.Corridas.OrderBy(c => c.DataHora))
-                                    {
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <h6 class="mb-0 fw-bold">@corrida.NomeGrandePremio</h6>
-                                                <small class="text-muted">🏁 @corrida.Circuito</small>
-                                                <br />
-                                                <small class="text-muted">📅 @corrida.DataHora.ToString("dd/MM/yyyy HH:mm")</small>
-                                            </div>
-                                            <a asp-page="/Corridas/Details" asp-route-id="@corrida.Id"
-                                               class="btn btn-sm btn-outline-secondary">Ver Corrida</a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <div class="p-4 text-center text-muted">
-                                    Nenhuma corrida agendada para este campeonato.
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Script para gerir a mudança das tabelas de classificação -->
-        <script>
-            function switchStandings(type) {
-                const title = document.getElementById('standingsTitle');
-                const listPilotos = document.getElementById('standingsPilotos');
-                const listEquipas = document.getElementById('standingsEquipas');
-                const btnPilotos = document.getElementById('togglePilotos');
-                const btnEquipas = document.getElementById('toggleEquipas');
-
-                if (type === 'pilotos') {
-                    title.innerText = "🏆 Classificação Geral de Pilotos";
-                    listPilotos.classList.remove('d-none');
-                    listEquipas.classList.add('d-none');
-                    btnPilotos.classList.add('active');
-                    btnEquipas.classList.remove('active');
-                } else {
-                    title.innerText = "🏎️ Classificação Geral de Equipas";
-                    listPilotos.classList.add('d-none');
-                    listEquipas.classList.remove('d-none');
-                    btnPilotos.classList.remove('active');
-                    btnEquipas.classList.add('active');
-                }
-            }
-        </script>
+        if (type === 'pilotos') {
+            title.innerText = "🏆 Classificação Geral de Pilotos";
+            listPilotos.classList.remove('d-none');
+            listEquipas.classList.add('d-none');
+            btnPilotos.classList.add('active');
+            btnEquipas.classList.remove('active');
+        } else {
+            title.innerText = "🏎️ Classificação Geral de Equipas";
+            listPilotos.classList.add('d-none');
+            listEquipas.classList.remove('d-none');
+            btnPilotos.classList.remove('active');
+            btnEquipas.classList.add('active');
+        }
+    }
+</script>

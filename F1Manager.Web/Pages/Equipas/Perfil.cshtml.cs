@@ -111,21 +111,13 @@ namespace F1Manager.Web.Pages.Equipas
                     return Page();
                 }
 
-                var folderPath = Path.Combine(_environment.WebRootPath, "uploads", "equipas");
-                if (!Directory.Exists(folderPath))
+                // Converte o logótipo carregado para string Base64 e guarda diretamente na base de dados
+                using (var memoryStream = new MemoryStream())
                 {
-                    Directory.CreateDirectory(folderPath);
+                    await LogotipoUpload.CopyToAsync(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+                    equipaDb.Logotipo = $"data:{LogotipoUpload.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
                 }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(LogotipoUpload.FileName);
-                var filePath = Path.Combine(folderPath, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await LogotipoUpload.CopyToAsync(stream);
-                }
-
-                equipaDb.Logotipo = $"/uploads/equipas/{uniqueFileName}";
             }
 
             _context.Equipas.Update(equipaDb);

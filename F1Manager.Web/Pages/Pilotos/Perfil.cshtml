@@ -1,90 +1,85 @@
 @page
 @model F1Manager.Web.Pages.Pilotos.PerfilModel
 @{
-    ViewData["Title"] = "Perfil do Piloto";
+    ViewData["Title"] = "O Meu Perfil de Piloto";
 }
 
 <div class="container py-5">
     @if (!Model.TemPilotoAssociado)
     {
-        <div class="alert alert-warning text-center shadow-sm" role="alert">
-            <h4 class="alert-heading fw-bold">⚠️ Conta Não Associada</h4>
-            <p class="mb-0">A sua conta de utilizador ainda não foi vinculada a nenhum piloto oficial pelo administrador da
-                plataforma.</p>
-            </div>
-        }
-        else
-        {
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card shadow-sm border-0 card-f1">
-                        <div class="card-header bg-dark text-white p-4">
+        <div class="alert alert-warning text-center shadow-sm">
+            <h4 class="alert-heading">⚠️ Conta Não Vinculada</h4>
+            <p>A sua conta de utilizador ainda não foi vinculada a nenhum piloto oficial pelo administrador da plataforma.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 card-f1">
+                    <div class="card-header bg-dark text-white p-4 d-flex justify-content-between align-items-center">
+                        <div>
                             <h2 class="h4 mb-0">👤 O Meu Perfil de Piloto</h2>
                             <span class="badge bg-danger mt-2">@Model.Piloto.Equipa?.Nome</span>
                         </div>
-                        <div class="card-body p-4 p-md-5">
-                            <form method="post" enctype="multipart/form-data">
-                                <input type="hidden" asp-for="Piloto.Id" />
-                                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Piloto.Id" />
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
-                                <div class="row align-items-center mb-4">
-                                    <div class="col-md-4 text-center mb-3 mb-md-0">
-                                        @if (!string.IsNullOrEmpty(Model.Piloto.FotoPerfil))
-                                        {
-                                            <img src="@Model.Piloto.FotoPerfil" class="img-thumbnail rounded-circle"
-                                                 style="width: 150px; height: 150px; object-fit: cover;" alt="Foto de
-                                            perfil" />
-                                        }
-                                        else
-                                        {
-                                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto"
-                                                 style="width: 150px; height:
-                                                150px; font-size: 3rem;">
-                                                @Model.Piloto.Nome.Substring(0, 1)
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h3 class="h4 fw-bold">@Model.Piloto.Nome</h3>
-                                        <p class="text-muted mb-1">Número do Carro: <strong>#@Model.Piloto.NumeroCarro</strong>
-                                        </p>
-                                        <p class="text-muted mb-0">Equipa: <strong>@Model.Piloto.Equipa?.Nome</strong></p>
-                                    </div>
+                            <div class="row align-items-center mb-4">
+                                <div class="col-md-4 text-center mb-3 mb-md-0">
+                                    @if (!string.IsNullOrEmpty(Model.Piloto.FotoPerfil))
+                                    {
+                                        <img src="@Model.Piloto.FotoPerfil" class="img-thumbnail rounded-circle profile-img" alt="Foto de perfil" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto profile-placeholder">
+                                            @Model.Piloto.Nome.Substring(0, 1)
+                                        </div>
+                                    }
                                 </div>
-
-                                <hr />
-
-                                <!-- Upload de Foto -->
-                                <div class="mb-3">
-                                    <label asp-for="FotoUpload" class="form-label fw-bold">Alterar Foto de Perfil</label>
-                                    <input asp-for="FotoUpload" type="file" class="form-control" accept="image/*" />
-                                    <span asp-validation-for="FotoUpload" class="text-danger"></span>
+                                <div class="col-md-8">
+                                    <h3 class="h4 fw-bold">@Model.Piloto.Nome</h3>
+                                    <p class="text-muted mb-1">Número do Carro: <strong>#@Model.Piloto.NumeroCarro</strong></p>
+                                    <p class="text-muted mb-0">Equipa: <strong>@Model.Piloto.Equipa?.Nome</strong></p>
                                 </div>
+                            </div>
 
-                                <!-- Campo Peso -->
-                                <div class="mb-3">
-                                    <label asp-for="Piloto.Peso" class="form-label fw-bold">Peso (kg)</label>
-                                    <input asp-for="Piloto.Peso" class="form-control" placeholder="Ex: 72" />
-                                    <span asp-validation-for="Piloto.Peso" class="text-danger"></span>
-                                </div>
+                            <hr />
 
-                                <!-- Campo Biografia -->
-                                <div class="mb-3">
-                                    <label asp-for="Piloto.Biografia" class="form-label fw-bold">Biografia</label>
-                                    <textarea asp-for="Piloto.Biografia" class="form-control" rows="4"
-                                              placeholder="Escreva uma curta biografia sua..."></textarea>
-                                    <span asp-validation-for="Piloto.Biografia" class="text-danger"></span>
-                                </div>
+                            <!-- Upload de Foto -->
+                            <div class="mb-3">
+                                <label asp-for="FotoUpload" class="form-label fw-bold">Alterar Foto de Perfil</label>
+                                <input asp-for="FotoUpload" type="file" class="form-control" accept="image/*" />
+                                <span asp-validation-for="FotoUpload" class="text-danger"></span>
+                            </div>
 
-                                <button type="submit" class="btn btn-f1 w-100 mt-3">Guardar Alterações</button>
-                            </form>
-                        </div>
+                            <!-- Campo Peso -->
+                            <div class="mb-3">
+                                <label asp-for="Piloto.Peso" class="form-label fw-bold">Peso (kg)</label>
+                                <input asp-for="Piloto.Peso" class="form-control" placeholder="Ex: 72" />
+                                <span asp-validation-for="Piloto.Peso" class="text-danger"></span>
+                            </div>
+
+                            <!-- Campo Biografia -->
+                            <div class="mb-3">
+                                <label asp-for="Piloto.Biografia" class="form-label fw-bold">Biografia</label>
+                                <textarea asp-for="Piloto.Biografia" class="form-control" rows="4" placeholder="Escreva uma curta biografia sua..."></textarea>
+                                <span asp-validation-for="Piloto.Biografia" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-f1 w-100 mt-3">Guardar Alterações</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        }
-    </div>
-
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+        </div>
     }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

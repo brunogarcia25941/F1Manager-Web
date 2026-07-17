@@ -4,16 +4,16 @@
     ViewData["Title"] = "Vincular Equipa a Utilizador";
 }
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8">
+<div class="vincular-container">
+    <div class="vincular-row">
+        <div class="vincular-col">
             <h1>Vincular Equipa a Utilizador</h1>
-            <p class="text-muted">Associe uma conta de utilizador a uma equipa específica</p>
+            <p class="vincular-subtitle">Associe uma conta de utilizador a uma equipa específica</p>
 
-            <form method="post" class="mt-4">
-                <div class="form-group mb-3">
+            <form method="post" class="vincular-form">
+                <div class="vincular-form-group">
                     <label for="utilizadorId" class="form-label">Selecione o Utilizador:</label>
-                    <select name="utilizadorId" id="utilizadorId" class="form-select" required onchange="this.form.submit()">
+                    <select name="utilizadorId" id="utilizadorId" class="vincular-select" required onchange="this.form.submit()">
                         <option value="">-- Escolha um utilizador --</option>
                         @foreach (var user in Model.Utilizadores)
                         {
@@ -26,15 +26,15 @@
 
                 @if (Model.UtilizadorSelecionado != null)
                 {
-                    <div class="alert alert-info mt-4">
+                    <div class="selected-user-box">
                         <strong>Utilizador Selecionado:</strong> @Model.UtilizadorSelecionado.Email
                         <br />
                         <strong>Roles Atuais:</strong> @string.Join(", ", Model.RolesUtilizador)
                     </div>
 
-                    <div class="form-group mb-3">
+                    <div class="vincular-form-group">
                         <label for="equipaId" class="form-label">Selecione a Equipa:</label>
-                        <select name="equipaId" id="equipaId" class="form-select" required>
+                        <select name="equipaId" id="equipaId" class="vincular-select" required>
                             <option value="">-- Escolha uma equipa --</option>
                             @foreach (var equipa in Model.Equipas)
                             {
@@ -47,7 +47,7 @@
 
                     @if (Model.EquipaSelecionada != null)
                     {
-                        <div class="alert alert-warning">
+                        <div class="warning-box">
                             <strong>⚠️ Atenção:</strong> Esta equipa @(string.IsNullOrEmpty(Model.EquipaSelecionada.UserId) ? "NÃO possui" : "já possui") uma conta associada.
                             @if (!string.IsNullOrEmpty(Model.EquipaSelecionada.UserId))
                             {
@@ -56,25 +56,25 @@
                             }
                         </div>
 
-                        <button type="submit" name="command" value="vincular" class="btn btn-primary">
+                        <button type="submit" name="command" value="vincular" class="vincular-btn-primary">
                             <i class="bi bi-link-45deg"></i> Vincular Equipa
                         </button>
-                        <a href="/Admin/Gerenciar/Equipas" class="btn btn-secondary">Cancelar</a>
+                        <a href="/Admin/Gerenciar/Equipas" class="vincular-btn-secondary">Cancelar</a>
                     }
                     else
                     {
-                        <button type="submit" name="command" value="vincular" class="btn btn-primary" disabled>
+                        <button type="submit" name="command" value="vincular" class="vincular-btn-primary" disabled>
                             <i class="bi bi-link-45deg"></i> Vincular Equipa
                         </button>
                     }
                 }
             </form>
 
-            <hr class="my-5" />
+            <hr class="vincular-divider" />
 
-            <h3 class="mt-5">Equipas Atualmente Vinculadas</h3>
-            <div class="table-responsive">
-                <table class="table table-striped">
+            <h3 class="vincular-section-title">Equipas Atualmente Vinculadas</h3>
+            <div class="vincular-table-wrapper">
+                <table class="vincular-table">
                     <thead>
                         <tr>
                             <th>Equipa</th>
@@ -97,9 +97,9 @@
                                     <td>
                                         @if (!string.IsNullOrEmpty(equipa.EmailUtilizador))
                                         {
-                                            <form method="post" style="display: inline;">
+                                            <form method="post" class="display-inline">
                                                 <input type="hidden" name="equipaId" value="@equipa.EquipaId" />
-                                                <button type="submit" name="command" value="desvincular" class="btn btn-sm btn-danger" onclick="return confirm('Tem a certeza? A equipa perderá acesso ao painel.')">
+                                                <button type="submit" name="command" value="desvincular" class="vincular-btn-danger" onclick="return confirm('Tem a certeza? A equipa perderá acesso ao painel.')">
                                                     Desvincular
                                                 </button>
                                             </form>
@@ -120,10 +120,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.875rem;
-    }
-</style>

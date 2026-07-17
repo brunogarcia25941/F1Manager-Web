@@ -40,21 +40,13 @@ namespace F1Manager.Web.Pages.Equipas
             // Processamento do upload do logótipo da equipa
             if (LogoUpload != null)
             {
-                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-                if (!Directory.Exists(folderPath))
+                // Converte o logótipo para string Base64 e guarda diretamente na base de dados
+                using (var memoryStream = new MemoryStream())
                 {
-                    Directory.CreateDirectory(folderPath);
+                    await LogoUpload.CopyToAsync(memoryStream);
+                    var fileBytes = memoryStream.ToArray();
+                    Equipa.Logotipo = $"data:{LogoUpload.ContentType};base64,{Convert.ToBase64String(fileBytes)}";
                 }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(LogoUpload.FileName);
-                var filePath = Path.Combine(folderPath, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await LogoUpload.CopyToAsync(fileStream);
-                }
-
-                Equipa.Logotipo = "/uploads/" + uniqueFileName;
             }
             else
             {
