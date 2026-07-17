@@ -21,7 +21,8 @@
                 Timing</a>
                 @if (User.IsInRole("Administrador"))
                 {
-                    <a asp-page="./GerirLive" asp-route-id="@Model.Corrida.Id" class="btn btn-danger">Simular Corrida em Direto</a>
+                    <a asp-page="./GerirLive" asp-route-id="@Model.Corrida.Id" class="btn btn-danger">Simular Corrida em
+                        Direto</a>
                         <a asp-page="./Edit" asp-route-id="@Model.Corrida.Id" class="btn btn-warning">Editar Corrida</a>
                     }
                 </div>
@@ -60,7 +61,28 @@
                                         @foreach (var r in Model.Resultados)
                                         {
                                             <tr>
-                                                <td class="text-center fw-bold">@r.PosicaoFinal º</td>
+                                                <!-- Destaque dourado, prateado e bronze para o pódio -->
+                                                <td class="text-center fw-bold">
+                                                    @if (r.PosicaoFinal == 1)
+                                                    {
+                                                        <span class="badge rounded-pill text-dark"
+                                                              style="background-color: #FFD700 !important; min-width: 35px;">1 º</span>
+                                                    }
+                                                    else if (r.PosicaoFinal == 2)
+                                                    {
+                                                        <span class="badge rounded-pill text-dark"
+                                                              style="background-color: #C0C0C0 !important; min-width: 35px;">2 º</span>
+                                                    }
+                                                    else if (r.PosicaoFinal == 3)
+                                                    {
+                                                        <span class="badge rounded-pill text-white"
+                                                              style="background-color: #CD7F32 !important; min-width: 35px;">3 º</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@r.PosicaoFinal º</span>
+                                                    }
+                                                </td>
                                                 <td class="fw-bold">@r.Piloto.Nome</td>
                                                 <td class="text-center">@r.Piloto.NumeroCarro</td>
                                                 <td>@(r.Piloto.Equipa != null ? r.Piloto.Equipa.Nome : "Sem Equipa")</td>

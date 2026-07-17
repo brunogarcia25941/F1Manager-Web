@@ -25,6 +25,7 @@ namespace F1Manager.Web.Pages.Campeonatos
         public EstatisticaPiloto? MaisVoltasRapidas { get; set; }
         public EstatisticaPiloto? MaisMediaPontos { get; set; }
         public EquipaEstatistica? EquipaMaisPontos { get; set; }
+        public IList<EquipaEstatistica> ClassificacaoEquipas { get; set; } = new List<EquipaEstatistica>();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -70,7 +71,8 @@ namespace F1Manager.Web.Pages.Campeonatos
             MaisVoltasRapidas = estatisticas.OrderByDescending(e => e.VoltasRapidas).FirstOrDefault();
             MaisMediaPontos = estatisticas.OrderByDescending(e => e.MediaPontos).FirstOrDefault();
 
-            EquipaMaisPontos = resultados
+            // Agrupar resultados por equipa para calcular a classificação completa
+            ClassificacaoEquipas = resultados
                 .Where(rc => rc.Piloto.Equipa != null)
                 .GroupBy(rc => new { rc.Piloto.EquipaId, rc.Piloto.Equipa!.Nome })
                 .Select(g => new EquipaEstatistica
@@ -82,7 +84,9 @@ namespace F1Manager.Web.Pages.Campeonatos
                     MediaPontos = g.Any() ? (double)g.Sum(x => x.Pontos) / g.Count() : 0
                 })
                 .OrderByDescending(e => e.PontosTotais)
-                .FirstOrDefault();
+                .ToList();
+
+            EquipaMaisPontos = ClassificacaoEquipas.FirstOrDefault();
 
             Classificacao = estatisticas
                 .OrderByDescending(c => c.PontosTotais)
