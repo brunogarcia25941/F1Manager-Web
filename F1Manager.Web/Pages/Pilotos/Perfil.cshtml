@@ -9,7 +9,8 @@
     {
         <div class="alert alert-warning text-center shadow-sm">
             <h4 class="alert-heading">⚠️ Conta Não Vinculada</h4>
-            <p>A sua conta de utilizador ainda não foi vinculada a nenhum piloto oficial pelo administrador da plataforma.</p>
+            <p>A sua conta de utilizador ainda não foi vinculada a nenhum piloto oficial pelo administrador da plataforma.
+            </p>
         </div>
     }
     else
@@ -30,20 +31,19 @@
 
                             <div class="row align-items-center mb-4">
                                 <div class="col-md-4 text-center mb-3 mb-md-0">
-                                    @if (!string.IsNullOrEmpty(Model.Piloto.FotoPerfil))
-                                    {
-                                        <img src="@Model.Piloto.FotoPerfil" class="img-thumbnail rounded-circle profile-img" alt="Foto de perfil" />
-                                    }
-                                    else
-                                    {
-                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto profile-placeholder">
-                                            @Model.Piloto.Nome.Substring(0, 1)
-                                        </div>
-                                    }
+                                    <img id="profileImagePreview" src="@Model.Piloto.FotoPerfil"
+                                         class="img-thumbnail rounded-circle profile-img @(string.IsNullOrEmpty(Model.Piloto.FotoPerfil) ? "d-none" : "")"
+                                         alt="Foto de perfil" />
+
+                                    <div id="profilePlaceholder"
+                                         class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto profile-placeholder @(string.IsNullOrEmpty(Model.Piloto.FotoPerfil) ? "" : "d-none")">
+                                        @Model.Piloto.Nome.Substring(0, 1)
+                                    </div>
                                 </div>
                                 <div class="col-md-8">
                                     <h3 class="h4 fw-bold">@Model.Piloto.Nome</h3>
-                                    <p class="text-muted mb-1">Número do Carro: <strong>#@Model.Piloto.NumeroCarro</strong></p>
+                                    <p class="text-muted mb-1">Número do Carro: <strong>#@Model.Piloto.NumeroCarro</strong>
+                                    </p>
                                     <p class="text-muted mb-0">Equipa: <strong>@Model.Piloto.Equipa?.Nome</strong></p>
                                 </div>
                             </div>
@@ -53,7 +53,8 @@
                             <!-- Upload de Foto -->
                             <div class="mb-3">
                                 <label asp-for="FotoUpload" class="form-label fw-bold">Alterar Foto de Perfil</label>
-                                <input asp-for="FotoUpload" type="file" class="form-control" accept="image/*" />
+                                <input asp-for="FotoUpload" id="fotoUploadInput" type="file" class="form-control"
+                                       accept="image/*" />
                                 <span asp-validation-for="FotoUpload" class="text-danger"></span>
                             </div>
 
@@ -67,7 +68,8 @@
                             <!-- Campo Biografia -->
                             <div class="mb-3">
                                 <label asp-for="Piloto.Biografia" class="form-label fw-bold">Biografia</label>
-                                <textarea asp-for="Piloto.Biografia" class="form-control" rows="4" placeholder="Escreva uma curta biografia sua..."></textarea>
+                                <textarea asp-for="Piloto.Biografia" class="form-control" rows="4"
+                                          placeholder="Escreva uma curta biografia sua..."></textarea>
                                 <span asp-validation-for="Piloto.Biografia" class="text-danger"></span>
                             </div>
 
@@ -82,4 +84,29 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Script para carregar o ficheiro em Base64 localmente e exibir no preview
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById("fotoUploadInput");
+            const preview = document.getElementById("profileImagePreview");
+            const placeholder = document.getElementById("profilePlaceholder");
+
+            if (input && preview) {
+                input.addEventListener("change", function () {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            preview.src = e.target.result;
+                            preview.classList.remove("d-none");
+                            if (placeholder) {
+                                placeholder.classList.add("d-none");
+                            }
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
 }

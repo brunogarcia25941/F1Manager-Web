@@ -18,8 +18,11 @@ namespace F1Manager.Web.Pages.Corridas
 
         public async Task OnGetAsync()
         {
+            // Carrega corridas, campeonatos e resultados com os respetivos pilotos
             Corridas = await _context.Corridas
                 .Include(c => c.Campeonato)
+                .Include(c => c.Resultados)
+                    .ThenInclude(r => r.Piloto)
                 .OrderBy(c => c.DataHora)
                 .ToListAsync();
         }

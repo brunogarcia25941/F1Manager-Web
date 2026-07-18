@@ -376,3 +376,93 @@ h6 {
     .f1-championship-card:hover::before {
       transform: scaleX(1);
     }
+
+
+    /* Estilos para a Barra de Pesquisa Global na Navbar */
+    .f1-search-container input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .f1-search-container input:focus {
+      outline: none;
+      box-shadow: 0 0 0 0.2rem var(--f1-red) !important;
+    }
+
+    #globalSearchResults {
+      border-radius: 8px;
+      background-color: #ffffff;
+    }
+
+    /* Item de resultado individual */
+    .f1-search-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      color: #333333;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: background-color 0.2s ease;
+    }
+
+    .f1-search-item:hover {
+      background-color: rgba(225, 6, 0, 0.05);
+      text-decoration: none;
+    }
+
+    .f1-search-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Crachás identificadores de tipo (Badges) */
+    .f1-search-type-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .badge-piloto { background-color: #1f1f27; color: #fff; }
+    .badge-equipa { background-color: #e10600; color: #fff; }
+    .badge-campeonato { background-color: #ffc107; color: #212529; }
+    .badge-corrida { background-color: #17a2b8; color: #fff; }
+
+
+
+    .btn-live-action {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        background-color: transparent;
+        transition: all 0.15s ease-in-out;
+    }
+
+    /* Botão de Subida (Verde) */
+    .btn-up {
+        color: #198754;
+        border: 1px solid #198754;
+    }
+
+    .btn-up:hover:not(:disabled) {
+        color: #fff;
+        background-color: #198754;
+    }
+
+    /* Botão de Descida (Vermelho) */
+    .btn-down {
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+
+    .btn-down:hover:not(:disabled) {
+        color: #fff;
+        background-color: #dc3545;
+    }
+
+    /* Botões desativados nas extremidades (1º e último) */
+    .btn-live-action:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }

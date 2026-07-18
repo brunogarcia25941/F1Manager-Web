@@ -9,7 +9,8 @@
     {
         <div class="warning-alert-box" role="alert">
             <h4 class="warning-alert-title">⚠️ Conta Não Associada</h4>
-            <p>A sua conta de utilizador ainda não foi vinculada a nenhuma equipa oficial pelo administrador da plataforma.</p>
+            <p>A sua conta de utilizador ainda não foi vinculada a nenhuma equipa oficial pelo administrador da plataforma.
+            </p>
         </div>
     }
     else
@@ -27,16 +28,14 @@
 
                             <div class="profile-intro-row">
                                 <div class="profile-avatar-container">
-                                    @if (!string.IsNullOrEmpty(Model.Equipa.Logotipo))
-                                    {
-                                        <img src="@Model.Equipa.Logotipo" class="logo-img" alt="Logo da Equipa" />
-                                    }
-                                    else
-                                    {
-                                        <div class="logo-placeholder">
-                                            @Model.Equipa.Nome.Substring(0, 1)
-                                        </div>
-                                    }
+                                    <img id="logoImagePreview" src="@Model.Equipa.Logotipo" class="logo-img"
+                                         style="@(string.IsNullOrEmpty(Model.Equipa.Logotipo) ? "display: none;" : "")"
+                                         alt="Logo da Equipa" />
+
+                                    <div id="logoPlaceholder" class="logo-placeholder"
+                                         style="@(string.IsNullOrEmpty(Model.Equipa.Logotipo) ? "" : "display: none;")">
+                                        @Model.Equipa.Nome.Substring(0, 1)
+                                    </div>
                                 </div>
                                 <div class="profile-meta-container">
                                     <h3 class="profile-name">@Model.Equipa.Nome</h3>
@@ -50,7 +49,8 @@
                             <!-- Upload de Logo -->
                             <div class="profile-form-group">
                                 <label asp-for="LogotipoUpload" class="profile-form-label">Alterar Logótipo</label>
-                                <input asp-for="LogotipoUpload" type="file" class="profile-form-control" accept="image/*" />
+                                <input asp-for="LogotipoUpload" id="logotipoUploadInput" type="file"
+                                       class="profile-form-control" accept="image/*" />
                                 <small class="profile-form-help">Formatos: JPG, PNG. Tamanho máx: 2MB</small>
                                 <span asp-validation-for="LogotipoUpload" class="text-danger"></span>
                             </div>
@@ -62,91 +62,116 @@
                                     <span asp-validation-for="Equipa.Nome" class="text-danger"></span>
                                 </div>
                                 <div class="profile-block-col profile-form-group">
-                                    <label asp-for="Equipa.FabricanteMotor" class="profile-form-label">Fabricante de Motor</label>
-                                    <input asp-for="Equipa.FabricanteMotor" class="profile-form-control" />
-                                    <span asp-validation-for="Equipa.FabricanteMotor" class="text-danger"></span>
+                                    <label asp-for="Equipa.FabricanteMotor" class="profile-form-label">Fabricante de
+                                        Motor</label>
+                                        <input asp-for="Equipa.FabricanteMotor" class="profile-form-control" />
+                                        <span asp-validation-for="Equipa.FabricanteMotor" class="text-danger"></span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="profile-blocks-grid">
-                                <div class="profile-block-col profile-form-group">
-                                    <label asp-for="Equipa.Pais" class="profile-form-label">País</label>
-                                    <input asp-for="Equipa.Pais" class="profile-form-control" />
-                                    <span asp-validation-for="Equipa.Pais" class="text-danger"></span>
+                                <div class="profile-blocks-grid">
+                                    <div class="profile-block-col profile-form-group">
+                                        <label asp-for="Equipa.Pais" class="profile-form-label">País</label>
+                                        <input asp-for="Equipa.Pais" class="profile-form-control" />
+                                        <span asp-validation-for="Equipa.Pais" class="text-danger"></span>
+                                    </div>
+                                    <div class="profile-block-col profile-form-group">
+                                        <label asp-for="Equipa.ChefeEquipa" class="profile-form-label">Chefe de Equipa</label>
+                                        <input asp-for="Equipa.ChefeEquipa" class="profile-form-control" />
+                                        <span asp-validation-for="Equipa.ChefeEquipa" class="text-danger"></span>
+                                    </div>
                                 </div>
-                                <div class="profile-block-col profile-form-group">
-                                    <label asp-for="Equipa.ChefeEquipa" class="profile-form-label">Chefe de Equipa</label>
-                                    <input asp-for="Equipa.ChefeEquipa" class="profile-form-control" />
-                                    <span asp-validation-for="Equipa.ChefeEquipa" class="text-danger"></span>
+
+                                <div class="profile-blocks-grid">
+                                    <div class="profile-block-col profile-form-group">
+                                        <label asp-for="Equipa.AnoFundacao" class="profile-form-label">Ano de Fundação</label>
+                                        <input asp-for="Equipa.AnoFundacao" type="number" class="profile-form-control" />
+                                        <span asp-validation-for="Equipa.AnoFundacao" class="text-danger"></span>
+                                    </div>
+                                    <div class="profile-block-col profile-form-group"></div>
                                 </div>
-                            </div>
 
-                            <div class="profile-blocks-grid">
-                                <div class="profile-block-col profile-form-group">
-                                    <label asp-for="Equipa.AnoFundacao" class="profile-form-label">Ano de Fundação</label>
-                                    <input asp-for="Equipa.AnoFundacao" type="number" class="profile-form-control" />
-                                    <span asp-validation-for="Equipa.AnoFundacao" class="text-danger"></span>
+                                <div class="profile-form-group">
+                                    <label asp-for="Equipa.Historia" class="profile-form-label">História da Equipa</label>
+                                    <textarea asp-for="Equipa.Historia" class="profile-form-textarea" rows="4"
+                                              placeholder="Escreva a história e informações sobre a sua equipa..."></textarea>
+                                    <span asp-validation-for="Equipa.Historia" class="text-danger"></span>
                                 </div>
-                                <div class="profile-block-col profile-form-group"></div>
-                            </div>
 
-                            <div class="profile-form-group">
-                                <label asp-for="Equipa.Historia" class="profile-form-label">História da Equipa</label>
-                                <textarea asp-for="Equipa.Historia" class="profile-form-textarea" rows="4"
-                                          placeholder="Escreva a história e informações sobre a sua equipa..."></textarea>
-                                <span asp-validation-for="Equipa.Historia" class="text-danger"></span>
-                            </div>
+                                <div class="form-actions-row">
+                                    <a href="@Url.Page("/Equipas/Index")" class="vincular-btn-secondary">Cancelar</a>
+                                    <button type="submit" class="vincular-btn-primary">💾 Guardar Alterações</button>
+                                </div>
+                            </form>
 
-                            <div class="form-actions-row">
-                                <a href="@Url.Page("/Equipas/Index")" class="vincular-btn-secondary">Cancelar</a>
-                                <button type="submit" class="vincular-btn-primary">💾 Guardar Alterações</button>
-                            </div>
-                        </form>
+                            <hr class="profile-divider" />
 
-                        <hr class="profile-divider" />
-
-                        <!-- Secção de Pilotos -->
-                        <div class="profile-section">
-                            <h4 class="profile-section-title">👥 Pilotos da Equipa</h4>
-                            @if (Model.Pilotos.Any())
-                            {
-                                <div class="vincular-table-wrapper">
-                                    <table class="vincular-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Nome</th>
-                                                <th>Número</th>
-                                                <th>Ação</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var piloto in Model.Pilotos)
-                                            {
+                            <!-- Secção de Pilotos -->
+                            <div class="profile-section">
+                                <h4 class="profile-section-title">👥 Pilotos da Equipa</h4>
+                                @if (Model.Pilotos.Any())
+                                {
+                                    <div class="vincular-table-wrapper">
+                                        <table class="vincular-table">
+                                            <thead>
                                                 <tr>
-                                                    <td><strong>@piloto.Nome</strong></td>
-                                                    <td><span class="profile-car-number">#@piloto.NumeroCarro</span></td>
-                                                    <td>
-                                                        <a href="@Url.Page("/Equipas/EditarPiloto", new { id = piloto.Id })" 
-                                                           class="team-pilot-btn-edit">✏️ Editar</a>
-                                                    </td>
+                                                    <th>Nome</th>
+                                                    <th>Número</th>
+                                                    <th>Ação</th>
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            }
-                            else
-                            {
-                                <p class="profile-empty-text">Nenhum piloto registado na equipa.</p>
-                            }
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var piloto in Model.Pilotos)
+                                                {
+                                                    <tr>
+                                                        <td><strong>@piloto.Nome</strong></td>
+                                                        <td><span class="profile-car-number">#@piloto.NumeroCarro</span></td>
+                                                        <td>
+                                                            <a href="@Url.Page("/Equipas/EditarPiloto", new { id = piloto.Id })"
+                                                               class="team-pilot-btn-edit">✏️ Editar</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="profile-empty-text">Nenhum piloto registado na equipa.</p>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const input = document.getElementById("logotipoUploadInput");
+                const preview = document.getElementById("logoImagePreview");
+                const placeholder = document.getElementById("logoPlaceholder");
+
+                if (input && preview) {
+                    input.addEventListener("change", function () {
+                        const file = this.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                preview.src = e.target.result;
+                                preview.style.display = "block"; // Força a exibição da imagem
+                                if (placeholder) {
+                                    placeholder.style.display = "none"; // Oculta o placeholder
+                                }
+                            }
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+        </script>
+    }
