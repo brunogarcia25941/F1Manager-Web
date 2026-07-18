@@ -340,3 +340,39 @@ h6 {
 .f1-driver-team-logo-placeholder {
   font-size: 1.5rem;
 }
+
+/* Cartão de Design para Campeonatos*/
+    .f1-championship-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Efeito de destaque superior em tons de ouro/vitória ao passar o rato */
+    .f1-championship-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #ffc107, #ff9800);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .f1-championship-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
+      border-color: rgba(255, 193, 7, 0.2);
+    }
+
+    .f1-championship-card:hover::before {
+      transform: scaleX(1);
+    }

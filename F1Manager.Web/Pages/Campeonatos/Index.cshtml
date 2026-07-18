@@ -4,43 +4,87 @@
     ViewData["Title"] = "Lista de Campeonatos";
 }
 
-<div class="container">
-    <h1 class="display-4">Campeonatos</h1>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h1 class="display-5 fw-bold mb-0 text-dark">🏆 Campeonatos</h1>
+            <p class="text-muted mb-0">Gestão de épocas, classificação oficial e histórico de competições.</p>
+        </div>
+        @if (User.IsInRole("Administrador"))
+        {
+            <a asp-page="Create" class="btn btn-f1">Adicionar Novo Campeonato</a>
+        }
+    </div>
 
-    @if (User.IsInRole("Administrador"))
+    @if (Model.CampeonatosExibicao != null && Model.CampeonatosExibicao.Any())
     {
-        <p>
-            <a asp-page="Create" class="btn btn-primary">Adicionar Novo Campeonato</a>
-        </p>
-    }
-
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Ano</th>
-                <th class="text-center">Nº de Corridas</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Campeonatos)
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+            @foreach (var item in Model.CampeonatosExibicao)
             {
-                <tr>
-                    <td>@item.Nome</td>
-                    <td>@item.Ano</td>
-                    <td class="text-center fw-bold">@item.Corridas.Count</td>
-                    <td>
-                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes /
-                            Classificação</a>
+                <div class="col">
+                    <div class="f1-championship-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <!-- Cabeçalho do Cartão: Época e Contagem de Corridas -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-dark text-white f1-team-badge-pill">🏁 Época @item.Ano</span>
+                                <span class="badge bg-danger text-white f1-team-badge-pill">@item.TotalCorridas GP(s)</span>
+                            </div>
+
+                            <!-- Nome do Campeonato -->
+                            <h3 class="h4 text-dark fw-bold mb-3">@item.Nome</h3>
+
+                            <!-- Barra de Progresso de Corridas Concluidas (com resultados registados) -->
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between small text-muted mb-1">
+                                    <span>Progresso da Época</span>
+                                    <strong>@item.CorridasConcluidas de @item.TotalCorridas Corridas</strong>
+                                </div>
+                                <div class="progress" style="height: 6px; background-color: rgba(0,0,0,0.08);">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                         style="width: @(item.TotalCorridas > 0 ? (item.CorridasConcluidas * 100 / item.TotalCorridas) : 0)%;"
+                                         aria-valuenow="@item.CorridasConcluidas" aria-valuemin="0"
+                                         aria-valuemax="@item.TotalCorridas">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dados do Líder do Campeonato -->
+                            <div class="p-3 bg-light rounded border border-light-subtle">
+                                <span class="text-uppercase text-muted d-block small fw-bold mb-1">🥇 Líder Atual</span>
+                                @if (!string.IsNullOrEmpty(item.NomeLider))
+                                {
+                                    <p class="mb-0 text-dark fw-semibold">
+                                        @item.NomeLider <span class="text-muted small">(@item.EquipaLider)</span>
+                                    </p>
+                                    <span class="badge bg-dark text-white mt-1">@item.PontosLider pts</span>
+                                }
+                                else
+                                {
+                                    <p class="mb-0 text-muted small italic">Sem resultados registados</p>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Ações na base do cartão -->
+                        <div class="mt-4 pt-3 border-top d-flex gap-2">
+                            <a asp-page="./Details" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-dark flex-grow-1 fw-bold">Classificação</a>
                             @if (User.IsInRole("Administrador"))
                             {
-                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
-                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning fw-bold">Editar</a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger fw-bold">Apagar</a>
                             }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary text-center p-5 mt-4" role="alert">
+            <h4 class="alert-heading mb-3">Sem Campeonatos Registados</h4>
+            <p class="mb-0 text-muted">Nenhum campeonato oficial foi encontrado na base de dados neste momento.</p>
+        </div>
+    }
+</div>
