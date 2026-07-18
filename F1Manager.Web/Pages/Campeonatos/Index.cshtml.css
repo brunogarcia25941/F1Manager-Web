@@ -1,0 +1,5 @@
+/* Barra de Progresso Customizada - Isolada para a Lista de Campeonatos */
+.f1-progress {
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.08);
+}

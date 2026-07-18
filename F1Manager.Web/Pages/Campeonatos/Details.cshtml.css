@@ -9,3 +9,12 @@
 .col-points {
     width: 100px;
 }
+
+/* Estilos isolados para Títulos de Estatísticas em Campeonatos */
+.text-stat-title-sm {
+  font-size: 0.8rem;
+}
+
+.text-stat-title-md {
+  font-size: 0.85rem;
+}

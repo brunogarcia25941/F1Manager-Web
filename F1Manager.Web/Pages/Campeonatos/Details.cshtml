@@ -26,14 +26,14 @@
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <div class="p-3 bg-light rounded border text-center h-100 shadow-sm">
-                        <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem;">🏁 Nº de Corridas</h5>
+                        <h5 class="text-muted text-uppercase fw-bold mb-1 text-stat-title-sm">🏁 Nº de Corridas</h5>
                         <p class="h3 fw-bold mb-0 text-primary">@Model.Campeonato.Corridas.Count</p>
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="p-3 bg-light rounded border text-center h-100 shadow-sm">
-                        <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem;">🏆 Líder Pilotos</h5>
+                        <h5 class="text-muted text-uppercase fw-bold mb-1 text-stat-title-sm">🏆 Líder Pilotos</h5>
                         @if (Model.Classificacao.Any())
                         {
                             var lider = Model.Classificacao.First();
@@ -49,7 +49,7 @@
 
                 <div class="col-md-4">
                     <div class="p-3 bg-light rounded border text-center h-100 shadow-sm">
-                        <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.8rem;">🏎️ Líder Construtores</h5>
+                        <h5 class="text-muted text-uppercase fw-bold mb-1 text-stat-title-sm">🏎️ Líder Construtores</h5>
                         @if (Model.ClassificacaoEquipas.Any())
                         {
                             var liderEquipa = Model.ClassificacaoEquipas.First();
@@ -155,7 +155,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="p-3 bg-light rounded border h-100 text-center">
-                                <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.85rem;">🏆 Piloto com Mais Vitórias</h5>
+                                <h5 class="text-muted text-uppercase fw-bold mb-1 text-stat-title-md">🏆 Piloto com Mais Vitórias</h5>
                                 @if (Model.MaisVitorias != null)
                                 {
                                     <p class="h5 fw-bold mb-0 text-warning text-truncate" title="@Model.MaisVitorias.NomePiloto">
@@ -172,7 +172,7 @@
 
                         <div class="col-md-6">
                             <div class="p-3 bg-light rounded border h-100 text-center">
-                                <h5 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.85rem;">🏎️ Construtor mais Eficiente</h5>
+                                <h5 class="text-muted text-uppercase fw-bold mb-1 text-stat-title-md">🏎️ Construtor mais Eficiente</h5>
                                 @if (Model.EquipaMaisPontos != null)
                                 {
                                     <p class="h5 fw-bold mb-0 text-success text-truncate" title="@Model.EquipaMaisPontos.NomeEquipa">

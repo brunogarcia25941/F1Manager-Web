@@ -74,13 +74,11 @@
                                                 @if (!string.IsNullOrEmpty(Model.FavoritosUtilizador.Piloto.FotoPerfil))
                                                 {
                                                     <img src="@Model.FavoritosUtilizador.Piloto.FotoPerfil" alt="Foto"
-                                                         class="rounded-circle shadow-sm"
-                                                         style="width: 60px; height: 60px; object-fit: cover;" />
+                                                         class="rounded-circle shadow-sm f1-favorite-avatar" />
                                                 }
                                                 else
                                                 {
-                                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                                                         style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm f1-favorite-placeholder">
                                                         @Model.FavoritosUtilizador.Piloto.Nome.Substring(0, 1)
                                                     </div>
                                                 }
@@ -119,13 +117,11 @@
                                                     <div class="d-flex align-items-center gap-3 my-3">
                                                         @if (!string.IsNullOrEmpty(Model.FavoritosUtilizador.Equipa.Logotipo))
                                                         {
-                                                            <img src="@Model.FavoritosUtilizador.Equipa.Logotipo" alt="Logótipo" class="shadow-sm"
-                                                                 style="width: 60px; height: 60px; object-fit: contain; background: #fff; padding: 4px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05);" />
+                                                            <img src="@Model.FavoritosUtilizador.Equipa.Logotipo" alt="Logótipo" class="shadow-sm f1-favorite-team-logo" />
                                                         }
                                                         else
                                                         {
-                                                            <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center shadow-sm"
-                                                                 style="width: 60px; height: 60px; font-size: 1.5rem; border-radius: 8px;">
+                                                            <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center shadow-sm f1-favorite-team-placeholder">
                                                                 🏁
                                                             </div>
                                                         }

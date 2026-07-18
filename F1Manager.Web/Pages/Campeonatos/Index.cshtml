@@ -39,7 +39,7 @@
                                     <span>Progresso da Época</span>
                                     <strong>@item.CorridasConcluidas de @item.TotalCorridas Corridas</strong>
                                 </div>
-                                <div class="progress" style="height: 6px; background-color: rgba(0,0,0,0.08);">
+                                <div class="progress f1-progress">
                                     <div class="progress-bar bg-danger" role="progressbar"
                                          style="width: @(item.TotalCorridas > 0 ? (item.CorridasConcluidas * 100 / item.TotalCorridas) : 0)%;"
                                          aria-valuenow="@item.CorridasConcluidas" aria-valuemin="0"

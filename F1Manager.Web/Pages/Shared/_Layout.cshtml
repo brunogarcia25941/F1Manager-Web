@@ -42,16 +42,14 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="position-relative ms-auto me-3 f1-search-container"
-                         style="max-width: 250px; width: 100%;">
+                    <div class="position-relative ms-auto me-3 f1-search-container">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-dark text-white border-0">🔍</span>
                             <input type="text" id="globalSearchInput" class="form-control bg-dark text-white border-0"
                                    placeholder="Pesquisar..." autocomplete="off" />
                         </div>
                         <!-- Painel Dropdown flutuante para apresentar os resultados em tempo real -->
-                        <div id="globalSearchResults" class="dropdown-menu shadow-lg w-100 mt-1 border-0"
-                             style="display: none; position: absolute; left: 0; right: 0; max-height: 300px; overflow-y: auto; z-index: 1050; background: #fff;">
+                        <div id="globalSearchResults" class="dropdown-menu shadow-lg w-100 mt-1 border-0">
                         </div>
                     </div>
                     <partial name="_LoginPartial" />
@@ -61,7 +59,22 @@
     </header>
 
     <main role="main" class="pb-3">
-        @RenderBody()
+        @if (ViewContext.HttpContext.Request.Path.Value?.Contains("/Account/Manage", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="card shadow-sm border-0 p-4 p-md-5 bg-white card-f1">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            @RenderBody()
+        }
     </main>
 
     

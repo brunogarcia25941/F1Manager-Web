@@ -1,0 +1,29 @@
+/* Estilos isolados para a Vista de Favoritos (Homepage) */
+.f1-favorite-avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.f1-favorite-placeholder {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+}
+
+.f1-favorite-team-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.f1-favorite-team-placeholder {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  border-radius: 8px;
+}
