@@ -17,6 +17,7 @@ namespace F1Manager.Web.Data
         public DbSet<Piloto> Pilotos { get; set; }
         public DbSet<Corrida> Corridas { get; set; }
         public DbSet<ResultadoCorrida> ResultadosCorridas { get; set; }
+        public DbSet<Favorito> Favoritos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -50,59 +50,161 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-5 p-4 bg-white shadow-sm rounded text-start text-dark">
-                    <h2 class="h4 border-bottom pb-2 text-center text-dark">🏁 Sobre o Projeto</h2>
 
-                    <div class="row mt-3">
-                        <!-- Informações Académicas e Autores -->
-                        <div class="col-md-6 mb-3">
-                            <h5 class="fw-bold">🎓 Enquadramento Académico</h5>
-                            <ul class="list-unstyled">
-                                <li><strong>Curso:</strong> Licenciatura em Engenharia Informática</li>
-                                <li><strong>Disciplina:</strong> Desenvolvimento Web</li>
-                                <li><strong>Ano Letivo:</strong> 2025/2026</li>
-                            </ul>
-
-                            <h5 class="fw-bold mt-3">👥 Autores</h5>
-                            <ul class="list-unstyled">
-                                <li><strong>Nº 25941 - Bruno Garcia</strong></li>
-                                <li><strong>Nº 25945 - João Passarinho</strong></li>
-                            </ul>
+                <!-- Painel de Favoritos do Utilizador -->
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <h2 class="h4 border-bottom pb-2 text-dark">⭐ Os Meus Favoritos</h2>
                         </div>
 
-                        <!-- Credenciais de Acesso e Bibliotecas de Terceiros -->
-                        <div class="col-md-6 mb-3">
-                            <h5 class="fw-bold">🔑 Credenciais de Teste</h5>
-                            <div class="p-2 border rounded bg-light mb-3">
-                                <strong>Role Administrador:</strong>
-                                <ul class="mb-0 ps-3">
-                                    <li><strong>Login:</strong> <code>admin@f1manager.pt</code></li>
-                                    <li><strong>Password:</strong> <code>Admin123!</code></li>
-                                </ul>
-                                <small class="text-muted d-block mt-1">
-                                    * Nota: Para testar a role <strong>Piloto</strong>, registe uma conta em "Registar", entre como
-                                    Administrador e faça a vinculação em
-                                    <strong>Pilotos -> Editar</strong>. A permissão de Piloto é ativada de imediato pelo site.
-                                </small>
-                            </div>
-
-                            <h5 class="fw-bold">📚 Bibliotecas & Tecnologias</h5>
-                            <ul class="ps-3 mb-0">
-                                <li><strong>ASP.NET Core 9 (Razor Pages & MVC API):</strong> Framework core do projeto (Microsoft,
-                                    obtido via NuGet).</li>
-                                    <li><strong>Entity Framework Core:</strong> ORM para abstração e persistência (Microsoft, obtido via
-                                        NuGet).</li>
-                                        <li><strong>Pomelo MySQL Driver:</strong> Ligação à base de dados MySQL (Pomelo Foundation, obtido
-                                            via NuGet).</li>
-                                            <li><strong>ASP.NET Core Identity:</strong> Autenticação, gestão de acessos e roles (Microsoft,
-                                                obtido via NuGet).</li>
-                                                <li><strong>SignalR:</strong> Sincronização em tempo real das classificações da corrida (Microsoft,
-                                                    obtido via NuGet/CDN).</li>
-                                                    <li><strong>Bootstrap & jQuery:</strong> Design e interatividade client-side (obtidos via
-                                                        CDN/Local).</li>
-                                                    </ul>
+                        <!-- Cartão de Piloto Favorito -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card card-f1 h-100 shadow-sm border-start border-warning border-4">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h4 class="h5 fw-bold text-dark mb-0">👤 Piloto Favorito</h4>
+                                            <span class="badge bg-warning text-dark">Estrela</span>
+                                        </div>
+                                        @if (Model.FavoritosUtilizador?.Piloto != null)
+                                        {
+                                            <div class="d-flex align-items-center gap-3 my-3">
+                                                @if (!string.IsNullOrEmpty(Model.FavoritosUtilizador.Piloto.FotoPerfil))
+                                                {
+                                                    <img src="@Model.FavoritosUtilizador.Piloto.FotoPerfil" alt="Foto"
+                                                         class="rounded-circle shadow-sm"
+                                                         style="width: 60px; height: 60px; object-fit: cover;" />
+                                                }
+                                                else
+                                                {
+                                                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                                                         style="width: 60px; height: 60px; font-size: 1.5rem;">
+                                                        @Model.FavoritosUtilizador.Piloto.Nome.Substring(0, 1)
+                                                    </div>
+                                                }
+                                                <div>
+                                                    <h5 class="fw-bold mb-1">@Model.FavoritosUtilizador.Piloto.Nome</h5>
+                                                    <span class="badge bg-dark">#@Model.FavoritosUtilizador.Piloto.NumeroCarro</span>
+                                                    <span class="text-danger small ms-2 fw-semibold">🏎️
+                                                        @Model.FavoritosUtilizador.Piloto.Equipa?.Nome</span>
+                                                    </div>
                                                 </div>
+                                                <a asp-page="/Pilotos/Details" asp-route-id="@Model.FavoritosUtilizador.Piloto.Id"
+                                                   class="btn btn-sm btn-outline-dark w-100 fw-bold mt-2">Ver Perfil do Piloto</a>
+                                            }
+                                    else
+                                            {
+                                                <p class="text-muted italic my-3 small">Ainda não escolheu nenhum piloto favorito.</p>
+                                                <a asp-page="/Pilotos/Index" class="btn btn-sm btn-outline-secondary w-100 mt-2">Escolher
+                                                    Piloto</a>
+                                                }
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- Cartão de Equipa Favorita -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="card card-f1 h-100 shadow-sm border-start border-warning border-4">
+                                        <div class="card-body d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h4 class="h5 fw-bold text-dark mb-0">🏎️ Equipa Favorita</h4>
+                                                    <span class="badge bg-warning text-dark">Estrela</span>
+                                                </div>
+                                                @if (Model.FavoritosUtilizador?.Equipa != null)
+                                                {
+                                                    <div class="d-flex align-items-center gap-3 my-3">
+                                                        @if (!string.IsNullOrEmpty(Model.FavoritosUtilizador.Equipa.Logotipo))
+                                                        {
+                                                            <img src="@Model.FavoritosUtilizador.Equipa.Logotipo" alt="Logótipo" class="shadow-sm"
+                                                                 style="width: 60px; height: 60px; object-fit: contain; background: #fff; padding: 4px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05);" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center shadow-sm"
+                                                                 style="width: 60px; height: 60px; font-size: 1.5rem; border-radius: 8px;">
+                                                                🏁
+                                                            </div>
+                                                        }
+                                                        <div>
+                                                            <h5 class="fw-bold mb-1">@Model.FavoritosUtilizador.Equipa.Nome</h5>
+                                                            <p class="text-muted small mb-0">⚙️ Motor:
+                                                                <strong>@Model.FavoritosUtilizador.Equipa.FabricanteMotor</strong></p>
+                                                                <p class="text-muted small mb-0">📍 País:
+                                                                    <strong>@Model.FavoritosUtilizador.Equipa.Pais</strong></p>
+                                                                </div>
+                                                            </div>
+                                                            <a asp-page="/Equipas/Details" asp-route-id="@Model.FavoritosUtilizador.Equipa.Id"
+                                                               class="btn btn-sm btn-outline-dark w-100 fw-bold mt-2">Ver Detalhes da Equipa</a>
+                                                        }
+                                    else
+                                                        {
+                                                            <p class="text-muted italic my-3 small">Ainda não escolheu nenhuma equipa favorita.</p>
+                                                            <a asp-page="/Equipas/Index" class="btn btn-sm btn-outline-secondary w-100 mt-2">Escolher
+                                                                Equipa</a>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="mt-5 p-4 bg-white shadow-sm rounded text-start text-dark">
+                                        <h2 class="h4 border-bottom pb-2 text-center text-dark">🏁 Sobre o Projeto</h2>
+
+                                        <div class="row mt-3">
+                                            <!-- Informações Académicas e Autores -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5 class="fw-bold">🎓 Enquadramento Académico</h5>
+                                                <ul class="list-unstyled">
+                                                    <li><strong>Curso:</strong> Licenciatura em Engenharia Informática</li>
+                                                    <li><strong>Disciplina:</strong> Desenvolvimento Web</li>
+                                                    <li><strong>Ano Letivo:</strong> 2025/2026</li>
+                                                </ul>
+
+                                                <h5 class="fw-bold mt-3">👥 Autores</h5>
+                                                <ul class="list-unstyled">
+                                                    <li><strong>Nº 25941 - Bruno Garcia</strong></li>
+                                                    <li><strong>Nº 25945 - João Passarinho</strong></li>
+                                                </ul>
+                                            </div>
+
+                                            <!-- Credenciais de Acesso e Bibliotecas de Terceiros -->
+                                            <div class="col-md-6 mb-3">
+                                                <h5 class="fw-bold">🔑 Credenciais de Teste</h5>
+                                                <div class="p-2 border rounded bg-light mb-3">
+                                                    <strong>Role Administrador:</strong>
+                                                    <ul class="mb-0 ps-3">
+                                                        <li><strong>Login:</strong> <code>admin@f1manager.pt</code></li>
+                                                        <li><strong>Password:</strong> <code>Admin123!</code></li>
+                                                    </ul>
+                                                    <small class="text-muted d-block mt-1">
+                                                        * Nota: Para testar a role <strong>Piloto</strong>, registe uma conta em "Registar", entre como
+                                                        Administrador e faça a vinculação em
+                                                        <strong>Pilotos -> Editar</strong>. A permissão de Piloto é ativada de imediato pelo site.
+                                                    </small>
+                                                </div>
+
+                                                <h5 class="fw-bold">📚 Bibliotecas & Tecnologias</h5>
+                                                <ul class="ps-3 mb-0">
+                                                    <li><strong>ASP.NET Core 9 (Razor Pages & MVC API):</strong> Framework core do projeto (Microsoft,
+                                                        obtido via NuGet).</li>
+                                                        <li><strong>Entity Framework Core:</strong> ORM para abstração e persistência (Microsoft, obtido via
+                                                            NuGet).</li>
+                                                            <li><strong>Pomelo MySQL Driver:</strong> Ligação à base de dados MySQL (Pomelo Foundation, obtido
+                                                                via NuGet).</li>
+                                                                <li><strong>ASP.NET Core Identity:</strong> Autenticação, gestão de acessos e roles (Microsoft,
+                                                                    obtido via NuGet).</li>
+                                                                    <li><strong>SignalR:</strong> Sincronização em tempo real das classificações da corrida (Microsoft,
+                                                                        obtido via NuGet/CDN).</li>
+                                                                        <li><strong>Bootstrap & jQuery:</strong> Design e interatividade client-side (obtidos via
+                                                                            CDN/Local).</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
             

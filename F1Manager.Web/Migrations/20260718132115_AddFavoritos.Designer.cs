@@ -4,6 +4,7 @@ using F1Manager.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace F1Manager.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260718132115_AddFavoritos")]
+    partial class AddFavoritos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,34 +121,6 @@ namespace F1Manager.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Equipas");
-                });
-
-            modelBuilder.Entity("F1Manager.Web.Models.Favorito", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("EquipaId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PilotoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("varchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EquipaId");
-
-                    b.HasIndex("PilotoId");
-
-                    b.ToTable("Favoritos");
                 });
 
             modelBuilder.Entity("F1Manager.Web.Models.Piloto", b =>
@@ -423,21 +398,6 @@ namespace F1Manager.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Campeonato");
-                });
-
-            modelBuilder.Entity("F1Manager.Web.Models.Favorito", b =>
-                {
-                    b.HasOne("F1Manager.Web.Models.Equipa", "Equipa")
-                        .WithMany()
-                        .HasForeignKey("EquipaId");
-
-                    b.HasOne("F1Manager.Web.Models.Piloto", "Piloto")
-                        .WithMany()
-                        .HasForeignKey("PilotoId");
-
-                    b.Navigation("Equipa");
-
-                    b.Navigation("Piloto");
                 });
 
             modelBuilder.Entity("F1Manager.Web.Models.Piloto", b =>
