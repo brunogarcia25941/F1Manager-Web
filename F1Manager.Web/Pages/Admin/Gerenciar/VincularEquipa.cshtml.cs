@@ -22,7 +22,7 @@ namespace F1Manager.Web.Pages.Admin.Gerenciar
         public List<IdentityUser> Utilizadores { get; set; } = new();
         public List<Equipa> Equipas { get; set; } = new();
         public List<EquipaComUtilizador> EquipasVinculadas { get; set; } = new();
-        
+
         public IdentityUser? UtilizadorSelecionado { get; set; }
         public string? UtilizadorSelecionadoId { get; set; }
         public List<string> RolesUtilizador { get; set; } = new();
@@ -57,7 +57,7 @@ namespace F1Manager.Web.Pages.Admin.Gerenciar
             {
                 UtilizadorSelecionadoId = utilizadorId;
                 UtilizadorSelecionado = await _userManager.FindByIdAsync(utilizadorId);
-                
+
                 if (UtilizadorSelecionado != null)
                 {
                     RolesUtilizador = (await _userManager.GetRolesAsync(UtilizadorSelecionado)).ToList();
@@ -72,11 +72,19 @@ namespace F1Manager.Web.Pages.Admin.Gerenciar
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(string command, string utilizadorId, int equipaId)
+        public async Task<IActionResult> OnPostAsync(string command, string utilizadorId, int? equipaId)
         {
             if (command == "vincular")
             {
-                var equipa = _context.Equipas.Find(equipaId);
+                // Valida se a equipa foi selecionada no formulário
+                if (!equipaId.HasValue)
+                {
+                    ModelState.AddModelError("", "Por favor, selecione uma equipa.");
+                    await OnGetAsync(utilizadorId, equipaId);
+                    return Page();
+                }
+
+                var equipa = _context.Equipas.Find(equipaId.Value);
                 if (equipa == null)
                 {
                     ModelState.AddModelError("", "Equipa não encontrada.");
@@ -110,7 +118,14 @@ namespace F1Manager.Web.Pages.Admin.Gerenciar
             }
             else if (command == "desvincular")
             {
-                var equipa = _context.Equipas.Find(equipaId);
+                if (!equipaId.HasValue)
+                {
+                    ModelState.AddModelError("", "Por favor, selecione uma equipa para desvincular.");
+                    await OnGetAsync();
+                    return Page();
+                }
+
+                var equipa = _context.Equipas.Find(equipaId.Value);
                 if (equipa == null)
                 {
                     ModelState.AddModelError("", "Equipa não encontrada.");

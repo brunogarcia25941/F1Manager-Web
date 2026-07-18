@@ -13,7 +13,8 @@
             <form method="post" class="vincular-form">
                 <div class="vincular-form-group">
                     <label for="utilizadorId" class="form-label">Selecione o Utilizador:</label>
-                    <select name="utilizadorId" id="utilizadorId" class="vincular-select" required onchange="this.form.submit()">
+                    <select name="utilizadorId" id="utilizadorId" class="vincular-select" required
+                            onchange="this.form.submit()">
                         <option value="">-- Escolha um utilizador --</option>
                         @foreach (var user in Model.Utilizadores)
                         {
@@ -45,28 +46,12 @@
                         </select>
                     </div>
 
-                    @if (Model.EquipaSelecionada != null)
-                    {
-                        <div class="warning-box">
-                            <strong>⚠️ Atenção:</strong> Esta equipa @(string.IsNullOrEmpty(Model.EquipaSelecionada.UserId) ? "NÃO possui" : "já possui") uma conta associada.
-                            @if (!string.IsNullOrEmpty(Model.EquipaSelecionada.UserId))
-                            {
-                                <br />
-                                <small>Ao vincular, a conta anterior será substituída.</small>
-                            }
-                        </div>
 
-                        <button type="submit" name="command" value="vincular" class="vincular-btn-primary">
-                            <i class="bi bi-link-45deg"></i> Vincular Equipa
-                        </button>
-                        <a href="/Admin/Gerenciar/Equipas" class="vincular-btn-secondary">Cancelar</a>
-                    }
-                    else
-                    {
-                        <button type="submit" name="command" value="vincular" class="vincular-btn-primary" disabled>
-                            <i class="bi bi-link-45deg"></i> Vincular Equipa
-                        </button>
-                    }
+                    <button type="submit" id="btnVincular" name="command" value="vincular" class="vincular-btn-primary"
+                            disabled>
+                        <i class="bi bi-link-45deg"></i> Vincular Equipa
+                    </button>
+                    <a href="/Admin/Gerenciar/Equipas" class="vincular-btn-secondary">Cancelar</a>
                 }
             </form>
 
@@ -99,7 +84,8 @@
                                         {
                                             <form method="post" class="display-inline">
                                                 <input type="hidden" name="equipaId" value="@equipa.EquipaId" />
-                                                <button type="submit" name="command" value="desvincular" class="vincular-btn-danger" onclick="return confirm('Tem a certeza? A equipa perderá acesso ao painel.')">
+                                                <button type="submit" name="command" value="desvincular" class="vincular-btn-danger"
+                                                        onclick="return confirm('Tem a certeza? A equipa perderá acesso ao painel.')">
                                                     Desvincular
                                                 </button>
                                             </form>
@@ -120,3 +106,26 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const equipaSelect = document.getElementById("equipaId");
+            const btnVincular = document.getElementById("btnVincular");
+
+            if (equipaSelect && btnVincular) {
+                function atualizarEstadoBotao() {
+                    // Ativa o botão apenas se o valor selecionado não for vazio (placeholder)
+                    btnVincular.disabled = !equipaSelect.value;
+                }
+
+                // Corre a verificação ao carregar a página
+                atualizarEstadoBotao();
+
+                // Escuta as alterações no dropdown de equipas
+                equipaSelect.addEventListener("change", atualizarEstadoBotao);
+            }
+        });
+    </script>
+}
