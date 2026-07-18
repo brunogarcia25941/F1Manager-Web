@@ -180,3 +180,87 @@ h6 {
   margin-right: 8px;
   vertical-align: middle;
 }
+
+/* Custom premium card design for F1 Teams */
+.f1-team-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.f1-team-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--f1-red), #ff4d4d);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.f1-team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(225, 6, 0, 0.08);
+  border-color: rgba(225, 6, 0, 0.15);
+}
+
+.f1-team-card:hover::before {
+  transform: scaleX(1);
+}
+
+.f1-team-badge-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+/* Custom premium card design for F1 Drivers */
+.f1-driver-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.f1-driver-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
+  border-color: var(--f1-red);
+}
+
+.f1-number-badge {
+  background: var(--f1-black);
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 2.2rem;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border-bottom: 4px solid var(--f1-red);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: skewX(-6deg);
+  transition: all 0.3s ease;
+}
+
+.f1-driver-card:hover .f1-number-badge {
+  background: var(--f1-red);
+  border-bottom-color: var(--f1-black);
+  transform: skewX(-6deg) scale(1.05);
+}

@@ -19,8 +19,10 @@ namespace F1Manager.Web.Pages.Equipas
 
         public async Task OnGetAsync()
         {
-            // Carrega todas as equipas da base de dados
-            Equipas = await _context.Equipas.ToListAsync();
+            // Carrega todas as equipas da base de dados incluindo os pilotos associados
+            Equipas = await _context.Equipas
+                .Include(e => e.Pilotos)
+                .ToListAsync();
         }
     }
 }

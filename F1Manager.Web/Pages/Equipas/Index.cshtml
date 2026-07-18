@@ -1,45 +1,57 @@
 @page
 @model F1Manager.Web.Pages.Equipas.IndexModel
 @{
-    ViewData["Title"] = "Lista de Equipas";
+    ViewData["Title"] = "Equipas";
 }
 
-<div class="container">
-    <h1 class="display-4">Lista de Equipas</h1>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h1 class="display-5 fw-bold mb-0 text-dark">🏁 Equipas de Fórmula 1</h1>
+            <p class="text-muted mb-0">Lista de construtores oficiais e as suas sedes de desenvolvimento.</p>
+        </div>
+        @if (User.IsInRole("Administrador"))
+        {
+            <a asp-page="Create" class="btn btn-f1">Adicionar Nova Equipa</a>
+        }
+    </div>
 
-    @if (User.IsInRole("Administrador"))
+    @if (Model.Equipas != null && Model.Equipas.Any())
     {
-        <p>
-            <a asp-page="Create" class="btn btn-primary">Adicionar Nova Equipa</a>
-        </p>
-    }
-
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Fabricante de Motor</th>
-                <th>País</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
             @foreach (var item in Model.Equipas)
             {
-                <tr>
-                    <td>@item.Nome</td>
-                    <td>@item.FabricanteMotor</td>
-                    <td>@item.Pais</td>
-                    <td>
-                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes</a>
-                        @if (User.IsInRole("Administrador"))
-                        {
-                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
-                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Apagar</a>
-                        }
-                    </td>
-                </tr>
+                <div class="col">
+                    <div class="f1-team-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-dark text-white f1-team-badge-pill">🏎️ Construtor</span>
+                                <span class="badge bg-danger text-white f1-team-badge-pill">@item.Pilotos.Count Piloto(s)</span>
+                            </div>
+                            <h3 class="h4 text-dark fw-bold mb-3">@item.Nome</h3>
+                            <div class="mb-3 text-muted">
+                                <p class="mb-2">⚙️ <strong>Motor:</strong> @item.FabricanteMotor</p>
+                                <p class="mb-0">📍 <strong>Sede:</strong> @item.Pais</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-top d-flex gap-2">
+                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark flex-grow-1 fw-bold">Ficha Completa</a>
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning fw-bold">Editar</a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger fw-bold">Apagar</a>
+                            }
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary text-center p-5 mt-4" role="alert">
+            <h4 class="alert-heading mb-3">Sem Equipas Registadas</h4>
+            <p class="mb-0 text-muted">Nenhum construtor foi encontrado na base de dados neste momento.</p>
+        </div>
+    }
 </div>
