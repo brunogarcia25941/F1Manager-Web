@@ -7,8 +7,8 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
         <div>
-            <h1 class="display-5 fw-bold mb-0 text-dark">👤 Pilotos de Fórmula 1</h1>
-            <p class="text-muted mb-0">Lista oficial de pilotos inscritos na temporada e respetivas escuderias.</p>
+            <h1 class="display-5 fw-bold mb-0 text-dark">👤 Pilotos</h1>
+            <p class="text-muted mb-0">Lista oficial de pilotos inscritos na temporada e respetivas equipas.</p>
         </div>
         @if (User.IsInRole("Administrador"))
         {
@@ -25,19 +25,49 @@
                     <div class="f1-driver-card h-100 d-flex flex-column justify-content-between">
                         <div>
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <!-- Distintivo com o número do carro do piloto -->
-                                <div class="f1-number-badge">
-                                    #@item.NumeroCarro
+                                <div class="d-flex align-items-center gap-2">
+                                    <!-- Foto do Piloto (Esquerda) -->
+                                    <div class="f1-driver-photo-container">
+                                        @if (!string.IsNullOrEmpty(item.FotoPerfil))
+                                        {
+                                            <img src="@item.FotoPerfil" alt="Foto de @item.Nome" class="f1-driver-photo-img" />
+                                        }
+                                        else
+                                        {
+                                            <div class="f1-driver-photo-placeholder">👤</div>
+                                        }
+                                    </div>
+                                    <!-- Número do Piloto (Direita) -->
+                                    <div class="f1-number-badge m-0">
+                                        #@item.NumeroCarro
+                                    </div>
                                 </div>
                                 <span class="badge bg-dark text-white f1-team-badge-pill">🏁 Piloto Oficial</span>
                             </div>
-                            
-                            <h3 class="h4 text-dark fw-bold mb-1">@item.Nome</h3>
-                            <p class="text-danger fw-bold mb-0">🏎️ @item.Equipa.Nome</p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <h3 class="h4 text-dark fw-bold mb-1">@item.Nome</h3>
+                                    <p class="text-danger fw-bold mb-0">🏎️ @item.Equipa.Nome</p>
+                                </div>
+                                <!-- Logótipo da Equipa (Direita) -->
+                                <div class="f1-driver-team-logo-container">
+                                    @if (!string.IsNullOrEmpty(item.Equipa?.Logotipo))
+                                    {
+                                        <img src="@item.Equipa.Logotipo" alt="Logótipo de @item.Equipa.Nome"
+                                             class="f1-driver-team-logo-img" />
+                                    }
+                                    else
+                                    {
+                                        <div class="f1-driver-team-logo-placeholder">🏁</div>
+                                    }
+                                </div>
+                            </div>
                         </div>
-                        
+
                         <div class="mt-4 pt-3 border-top d-flex gap-2">
-                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark flex-grow-1 fw-bold">Ficha do Piloto</a>
+                            <a asp-page="./Details" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-dark flex-grow-1 fw-bold">Ficha do Piloto</a>
                             @if (User.IsInRole("Administrador"))
                             {
                                 <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning fw-bold">Editar</a>

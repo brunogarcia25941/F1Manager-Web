@@ -7,7 +7,7 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
         <div>
-            <h1 class="display-5 fw-bold mb-0 text-dark">🏁 Equipas de Fórmula 1</h1>
+            <h1 class="display-5 fw-bold mb-0 text-dark">🏁 Equipas</h1>
             <p class="text-muted mb-0">Lista de construtores oficiais e as suas sedes de desenvolvimento.</p>
         </div>
         @if (User.IsInRole("Administrador"))
@@ -28,14 +28,31 @@
                                 <span class="badge bg-dark text-white f1-team-badge-pill">🏎️ Construtor</span>
                                 <span class="badge bg-danger text-white f1-team-badge-pill">@item.Pilotos.Count Piloto(s)</span>
                             </div>
-                            <h3 class="h4 text-dark fw-bold mb-3">@item.Nome</h3>
-                            <div class="mb-3 text-muted">
-                                <p class="mb-2">⚙️ <strong>Motor:</strong> @item.FabricanteMotor</p>
-                                <p class="mb-0">📍 <strong>Sede:</strong> @item.Pais</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <!-- Lado Esquerdo: Logótipo da Equipa -->
+                                <div class="f1-team-logo-container">
+                                    @if (!string.IsNullOrEmpty(item.Logotipo))
+                                    {
+                                        <img src="@item.Logotipo" alt="Logótipo de @item.Nome" class="f1-team-logo-img" />
+                                    }
+                                    else
+                                    {
+                                        <div class="f1-team-logo-placeholder">🏁</div>
+                                    }
+                                </div>
+                                <!-- Lado Direito: Nome, Motor e Sede -->
+                                <div>
+                                    <h3 class="h4 text-dark fw-bold mb-2">@item.Nome</h3>
+                                    <div class="text-muted small">
+                                        <p class="mb-1">⚙️ <strong>Motor:</strong> @item.FabricanteMotor</p>
+                                        <p class="mb-0">📍 <strong>Sede:</strong> @item.Pais</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-4 pt-3 border-top d-flex gap-2">
-                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark flex-grow-1 fw-bold">Ficha Completa</a>
+                            <a asp-page="./Details" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-dark flex-grow-1 fw-bold">Ficha Completa</a>
                             @if (User.IsInRole("Administrador"))
                             {
                                 <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning fw-bold">Editar</a>

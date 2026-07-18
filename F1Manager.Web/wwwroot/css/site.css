@@ -264,3 +264,79 @@ h6 {
   border-bottom-color: var(--f1-black);
   transform: skewX(-6deg) scale(1.05);
 }
+
+/* Contentor do logótipo da equipa na lista de Equipas */
+.f1-team-logo-container {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.f1-team-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+.f1-team-logo-placeholder {
+  font-size: 2rem;
+}
+
+/* Contentor da foto do piloto na lista de Pilotos */
+.f1-driver-photo-container {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.f1-driver-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.f1-driver-photo-placeholder {
+  font-size: 2rem;
+  color: #adb5bd;
+}
+
+/* Contentor do logótipo da equipa no cartão do piloto */
+.f1-driver-team-logo-container {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.f1-driver-team-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.f1-driver-team-logo-placeholder {
+  font-size: 1.5rem;
+}
